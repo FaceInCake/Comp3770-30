@@ -4,13 +4,18 @@ using UnityEngine;
 
 public class RotateIt : MonoBehaviour
 {
-    // Start is called before the first frame update
+
     void Start()
     {
         
     }
 
-    // Update is called once per frame
+    // called every 1/50th of a second
+    void FixedUpdate()
+    {
+        gameObject.transform.Rotate(30.0f / 50.0f, 60.0f / 50.0f, 90.0f / 50.0f, Space.World);
+    }
+
     void Update()
     {
         
