@@ -2,28 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NewBehaviourScript : MonoBehaviour
+public class ResizeIt : MonoBehaviour
 {
-    public Vector3[] scale;
+    private float scalar;
 
     // Start is called before the first frame update
     void Start()
     {
-        StartCoroutine(ResizePerSecond());
-        
+        scalar = 1;
     }
 
     // Update is called once per frame
-    void Update()
+    private void FixedUpdate()
     {
-        IEnumerator ResizePerSecond();
-        while(true)
-        {
-            for(int i = 0; i < scale.Length; i++)
-            {
-                yield return new WaitForSeconds(1f);
-                transform.localScale = differentScale[i];
-                }
-        }
+        if(gameObject.transform.localScale.x > 4
+        || gameObject.transform.localScale.x < 1)
+            scalar *= -1;
+        gameObject.transform.localScale += Vector3.one * scalar * Time.deltaTime;
     }
 }
