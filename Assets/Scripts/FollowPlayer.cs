@@ -11,7 +11,8 @@ public class FollowPlayer : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        //Debug.Log(target.position);
+       
     }
 
     // Update is called once per frame
@@ -19,5 +20,8 @@ public class FollowPlayer : MonoBehaviour
     {
         //update the position of the camera based on the position of the "target" (the player) + the offset
         transform.position = target.position + offset;
+
+        transform.LookAt(target);
+
     }
 }
