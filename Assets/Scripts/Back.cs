@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public class Back : MonoBehaviour
 {
     
-    public void loadMenuScene()
+    public void LoadMenuScene()
     {
         SceneManager.LoadScene("MainMenu");
     }

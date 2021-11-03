@@ -7,22 +7,22 @@ public class MainMenu : MonoBehaviour
 {
 
 
-    public void loadScoreScene()
+    public void LoadScoreScene()
     {
         SceneManager.LoadScene("Scores");
     }
 
-    public void loadLevelOne()
+    public void LoadLevelOne()
     {
         SceneManager.LoadScene("Level1");
     }
 
-    public void loadLevelTwo()
+    public void LoadLevelTwo()
     {
         SceneManager.LoadScene("Level2");
     }
 
-    public void loadLevelThree()
+    public void LoadLevelThree()
     {
         SceneManager.LoadScene("Level3");
     }
