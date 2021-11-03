@@ -29,7 +29,7 @@ public class Simulation {
     public int totalDamageDeltByPriest = 0;
 
 
-    StreamWriter fileWriter;
+    private StreamWriter fileWriter;
 
 
     private int randRange(int min, int max)
@@ -37,7 +37,7 @@ public class Simulation {
         return Random.Range(min, max + 1);
     }
 
-    Simulation(string name) {
+    public Simulation(string name) {
 
         bossHP = 5000;
         tankHP = 3000;
@@ -56,7 +56,7 @@ public class Simulation {
     }
 
     // Simulate a time step
-    bool simulate () {
+    public bool simulate () {
 
         //Deal 5 - 20 dmg to damage-dealers and healer(by boss)
         int dmg = randRange(5, 20);
@@ -78,22 +78,25 @@ public class Simulation {
         dmg = randRange(5, 10);
         bossHP -= dmg;
         totalDamageDeltByTank += dmg;
-
+        totalDamageDeltToBoss += dmg;
 
         //Deal 15 - 25 dmg to the boss(dealt by rogue)
         dmg = randRange(15, 25);
         bossHP -= dmg;
         totalDamageDeltByRogue += dmg;
+        totalDamageDeltToBoss += dmg;
 
         //Deal 5 - 30 dmg to the boss(dealt by mage)
         dmg = randRange(5, 30);
         bossHP -= dmg;
         totalDamageDeltByMage += dmg;
+        totalDamageDeltToBoss += dmg;
 
         //Deal 5 - 15 dmg to the boss(dealt by druid)
         dmg = randRange(5, 15);
         bossHP -= dmg;
         totalDamageDeltByDruid += dmg;
+        totalDamageDeltToBoss += dmg;
 
 
         //Priest randomly selects them self or a damage dealer. (Twice as likely to target them self).Heals that target for 15 HP and drains 5 MP.
@@ -150,7 +153,7 @@ public class Simulation {
         return false;
     }
 
-    bool isSimOver() {
+    public bool isSimOver() {
 
         if (bossHP < 0) return true;
         if (tankHP <= 0) return true;
@@ -161,14 +164,14 @@ public class Simulation {
         return false;
     }
 
-    void compareHighScores () {
+    public void compareHighScores () {
         //<-- Create Scores instance
         //<-- load in the current high scores
         //<-- Compare these scores to the high scores
         //<-- Update the high scores where necessary (dmg dealt is higher)
     }
 
-    void writeTimeStep () {
+    public void writeTimeStep () {
         fileWriter.Write(timeStep + ",");
         fileWriter.Write(bossHP + ",");
         fileWriter.Write(tankHP + ",");
