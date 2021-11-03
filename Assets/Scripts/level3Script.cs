@@ -12,7 +12,7 @@ public class level3Script : MonoBehaviour
     void Start()
     {
 
-        simulation = new Simulation("Level1");
+        simulation = new Simulation("Level3");
         backButton = GameObject.Find("Back");
         backButton.SetActive(false);
 
