@@ -32,7 +32,7 @@ public class Simulation {
     private StreamWriter fileWriter;
 
 
-    private int randRange(int min, int max)
+    public int randRange(int min, int max)
     {
         return Random.Range(min, max + 1);
     }

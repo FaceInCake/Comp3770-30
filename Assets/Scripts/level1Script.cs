@@ -14,7 +14,6 @@ public class level1Script : MonoBehaviour
         simulation = new Simulation("Level1");
         backButton = GameObject.Find("Back");
         backButton.SetActive(false);
-           
     }
 
 
