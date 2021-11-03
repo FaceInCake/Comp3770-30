@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+using System.IO;
+
 public class Simulation {
 
     int timeStep = 0;
@@ -26,6 +28,10 @@ public class Simulation {
     public int priestMP;
     public int totalDamageDeltByPriest = 0;
 
+
+    StreamWriter fileWriter;
+
+
     private int randRange(int min, int max)
     {
         return Random.Range(min, max + 1);
@@ -41,11 +47,12 @@ public class Simulation {
         priestHP = 900;
         priestMP = 1000;
 
-        //<-- open csv file
+        fileWriter = new StreamWriter(Application.dataPath + "/SaveData/" + name + ".csv");
     }
 
     ~Simulation () {
-        //<-- close the csv file
+        fileWriter.Flush();
+        fileWriter.Close();
     }
 
     // Simulate a time step
@@ -162,7 +169,14 @@ public class Simulation {
     }
 
     void writeTimeStep () {
-        
+        fileWriter.Write(timeStep + ",");
+        fileWriter.Write(bossHP + ",");
+        fileWriter.Write(tankHP + ",");
+        fileWriter.Write(rogueHP + ",");
+        fileWriter.Write(mageHP + ",");
+        fileWriter.Write(druidHP + ",");
+        fileWriter.Write(priestHP);
+        fileWriter.Write("\n");
     }
 
 }
