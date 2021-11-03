@@ -12,6 +12,7 @@ public class scoresScript : MonoBehaviour
 
 
     //Text objects in the scene
+    //Where BTP stands for Boss to Party and PTB stands for Party to Boss 
     GameObject lvl1BTP;
     GameObject lvl2BTP;
     GameObject lvl3BTP;
