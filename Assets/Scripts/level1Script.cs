@@ -7,10 +7,14 @@ public class level1Script : MonoBehaviour
 {
 
     Simulation simulation;
+    GameObject backButton;
 
     void Start()
     {
         simulation = new Simulation("Level1");
+        backButton = GameObject.Find("Back");
+        backButton.SetActive(false);
+           
     }
 
 
@@ -41,6 +45,12 @@ public class level1Script : MonoBehaviour
         
             
 
+        }
+
+        if(simulation.isSimOver())
+        {
+            //once the simulation is completed show back button to get back to menu
+            backButton.SetActive(true);
         }
 
     }
