@@ -191,4 +191,26 @@ public class Simulation {
         fileWriter.Write(string.Join(",", ar)+"\n");
     }
 
+    // Override
+    public string ToString () {
+        return "BossHP: " + bossHP + "\n"
+        +"Boss damage recieved: " + totalDamageDeltToBoss + "\n"
+        +"Boss damage delt: " + totalDamageDeltByBoss + "\n\n"
+
+        +"TankHP: " + tankHP + "\n"
+        +"Tank damage delt: " + totalDamageDeltByTank + "\n\n"
+
+        +"RogueHP: " + rogueHP + "\n"
+        +"Rogue damage delt: " + totalDamageDeltByRogue + "\n\n"
+
+        +"MageHP: " + mageHP + "\n"
+        +"Mage damage delt: " + totalDamageDeltByMage + "\n\n"
+
+        +"DruidHP: " + druidHP + "\n"
+        +"Druid damage delt: " + totalDamageDeltByDruid + "\n\n"
+
+        +"PriestHP: " + priestHP + "\n"
+        +"PreistMP: " + priestMP;
+    }
+
 }
