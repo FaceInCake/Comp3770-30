@@ -6,11 +6,6 @@ using UnityEngine.UI;
 
 public class scoresScript : MonoBehaviour
 {
-    // Start is called before the first frame update
-    //Instance of Scores class to load saved scores
-    Scores highScores;
-
-
     //Text objects in the scene
     //Where BTP stands for Boss to Party and PTB stands for Party to Boss 
     GameObject lvl1BTP;
@@ -35,19 +30,16 @@ public class scoresScript : MonoBehaviour
 
     public void updateScores()
     {
-
-        //layout for updating each text object in the scores scene
-        lvl1BTP.GetComponent<Text>().text = "-";
-        lvl2BTP.GetComponent<Text>().text = "-";
-        lvl3BTP.GetComponent<Text>().text = "-";
-        lvl1PTB.GetComponent<Text>().text = "-";
-        lvl2PTB.GetComponent<Text>().text = "-";
-        lvl3PTB.GetComponent<Text>().text = "-";
+        Scores sc = new Scores();
+        if (sc.loadScores()) {
+            //layout for updating each text object in the scores scene
+            lvl1BTP.GetComponent<Text>().text = sc.highScore.dmgByBoss[0].ToString();
+            lvl2BTP.GetComponent<Text>().text = sc.highScore.dmgByBoss[1].ToString();
+            lvl3BTP.GetComponent<Text>().text = sc.highScore.dmgByBoss[2].ToString();
+            lvl1PTB.GetComponent<Text>().text = sc.highScore.dmgToBoss[0].ToString();
+            lvl2PTB.GetComponent<Text>().text = sc.highScore.dmgToBoss[1].ToString();
+            lvl3PTB.GetComponent<Text>().text = sc.highScore.dmgToBoss[2].ToString();
+        } else Debug.Log("Unable to load scores");
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

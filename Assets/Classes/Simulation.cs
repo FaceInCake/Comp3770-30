@@ -5,6 +5,7 @@ using UnityEngine;
 using System.IO;
 
 public class Simulation {
+    private string name;
 
     int timeStep = 0;
 
@@ -26,7 +27,6 @@ public class Simulation {
 
     public int priestHP;
     public int priestMP;
-    public int totalDamageDeltByPriest = 0;
 
 
     private StreamWriter fileWriter;
@@ -38,6 +38,7 @@ public class Simulation {
     }
 
     public Simulation(string name) {
+        this.name = name;
 
         bossHP = 5000;
         tankHP = 3000;
@@ -165,21 +166,29 @@ public class Simulation {
     }
 
     public void compareHighScores () {
-        //<-- Create Scores instance
-        //<-- load in the current high scores
-        //<-- Compare these scores to the high scores
-        //<-- Update the high scores where necessary (dmg dealt is higher)
+        Scores sc = new Scores();
+        sc.loadScores();
+        int lvl = 0;
+        if (this.name.Equals("Level2")) lvl=1;
+        else if (this.name.Equals("Level3")) lvl=2;
+        if (this.totalDamageDeltByBoss > sc.highScore.dmgByBoss[lvl])
+            sc.highScore.dmgByBoss[lvl] = this.totalDamageDeltByBoss;
+        if (this.totalDamageDeltToBoss > sc.highScore.dmgToBoss[lvl])
+            sc.highScore.dmgToBoss[lvl] = this.totalDamageDeltToBoss;
+        sc.saveScores();        
     }
 
     public void writeTimeStep () {
-        fileWriter.Write(timeStep + ",");
-        fileWriter.Write(bossHP + ",");
-        fileWriter.Write(tankHP + ",");
-        fileWriter.Write(rogueHP + ",");
-        fileWriter.Write(mageHP + ",");
-        fileWriter.Write(druidHP + ",");
-        fileWriter.Write(priestHP);
-        fileWriter.Write("\n");
+        object [] ar = {
+            timeStep,
+            bossHP,
+            tankHP,
+            rogueHP,
+            mageHP,
+            druidHP,
+            priestHP
+        };
+        fileWriter.Write(string.Join(",", ar)+"\n");
     }
 
 }
