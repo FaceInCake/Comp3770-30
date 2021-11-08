@@ -1,3 +1,3 @@
 # Comp3770-30
 
-Project for Group 30's Comp3770 Fall2021 class
+Assignment 4 for comp3770, group 30.
