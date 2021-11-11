@@ -155,3 +155,4 @@ Attacking and defending against the enemy is an extreme logistical challenge. Th
 
 We’ve made a Machinations of the combat system in the game. Primarily focused on the PvP side of combat, named ‘exchanges’. There’s also some cash system, to be elaborated on later.
 
+I've attached an image of what we had. I can also share the machination with everyone. Hopefully it'll be in your emails. If not, contact 'eppel@uwindsor.ca'.
