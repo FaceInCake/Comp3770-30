@@ -310,11 +310,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterBody: {fileID: 2079261734}
   isFirstPerson: 0
-  fp_mouseSensitivity: 5
+  fp_mouseSensitivity: 0.5
   fp_maxCameraAngleY: 70
   fp_minCameraAngleY: -70
   fp_camHeight: 0.6
-  tp_mouseSensitivity: 0.1
+  tp_mouseSensitivity: 0.01
   tp_minCameraAngleY: 0.2
   tp_maxCameraAngleY: 1.4
   tp_camDistance: 6
@@ -355,6 +355,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2103195591090394463, guid: 587f9714d79c44445996dcbda3afb2dd, type: 3}
+      propertyPath: mouseSensitivityX
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 6605552556038986646, guid: 587f9714d79c44445996dcbda3afb2dd, type: 3}
       propertyPath: m_Name
       value: Player

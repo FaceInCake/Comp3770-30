@@ -14,9 +14,11 @@ public class KillTuretTest : MonoBehaviour
 
     void Update()
     {
+        /*
         if (Input.GetKeyDown(KeyCode.L))
         {
             turret.GetComponent<Alive>().dealDamage(30);
         }
+        */
     }
 }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class MovePlayer : MonoBehaviour
 {
@@ -16,10 +17,12 @@ public class MovePlayer : MonoBehaviour
     private Vector3 velocity = Vector3.zero;
     
     CharacterController controller;
+    GameObject camera;
 
     void Start()
     {
         controller = gameObject.GetComponent<CharacterController>();
+        camera = GameObject.Find("Main Camera");
     }
 
 
@@ -58,41 +61,58 @@ public class MovePlayer : MonoBehaviour
         velocity.y += jumpVelocity;
     }
 
-    private void handleJumpInput()
+    bool tryingToJump = false;
+    public void OnJump()
     {
-        if (isGrounded && Input.GetKey(KeyCode.Space))
+        tryingToJump = true;
+    }
+
+    private void jumpUpdate()
+    {
+        if (isGrounded && tryingToJump)
         {
             jump();
+            tryingToJump = false;
         }
     }
 
-    private void handleCameraRotationInput()
+    public void OnLook(InputValue input)
     {
-        float dx = Input.GetAxis("Mouse X");
+        Vector2 i = input.Get<Vector2>();
+        gameObject.transform.Rotate(0, i.x * mouseSensitivityX, 0, Space.World);
 
-        gameObject.transform.Rotate(0, dx * mouseSensitivityX, 0, Space.World);
-
+        camera.GetComponent<CharacterCamera>().onYaw(i.y);
     }
 
-    private void handleDirectionalInput()
+    public void OnToggleCamera()
     {
+        camera.GetComponent<CharacterCamera>().isFirstPerson = !camera.GetComponent<CharacterCamera>().isFirstPerson;
+    }
 
-        if (Input.GetKey(KeyCode.W))
+    Vector2 moveInput;
+    public void OnMove(InputValue input)
+    {
+        moveInput = input.Get<Vector2>();
+    }
+
+    public void moveUpdate()
+    {
+        if (moveInput.y > 0.5f)
         {
             velocity += getForward() * (acceleration * speedModifier + dragHorizontal) * Time.deltaTime;
         }
 
-        if (Input.GetKey(KeyCode.A))
+        if (moveInput.x < -0.5)
         {
             velocity += getLeft() * (acceleration * speedModifier + dragHorizontal) * Time.deltaTime;
         }
 
-        if (Input.GetKey(KeyCode.S))
+        if (moveInput.y < -0.5f)
         {
             velocity += getBackward() * (acceleration * speedModifier + dragHorizontal) * Time.deltaTime;
         }
 
-        if (Input.GetKey(KeyCode.D))
+        if (moveInput.x > 0.5f)
         {
             velocity += getRight() * (acceleration * speedModifier + dragHorizontal) * Time.deltaTime;
         }
@@ -113,9 +133,8 @@ public class MovePlayer : MonoBehaviour
         applyGravity();
         applyHorizontalDrag();
 
-        handleJumpInput();
-        handleDirectionalInput();
-        handleCameraRotationInput();
+        moveUpdate();
+        jumpUpdate();
 
         controller.Move(velocity * Time.deltaTime);
 

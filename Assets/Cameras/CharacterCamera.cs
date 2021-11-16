@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class CharacterCamera : MonoBehaviour
 {
@@ -24,10 +25,16 @@ public class CharacterCamera : MonoBehaviour
     {
     }
 
-    void updateThirdPerson()
+    float mouseYaw = 0.0f;
+    public void onYaw(float value)
     {
-        float mouseDY = -Input.GetAxis("Mouse Y");
-        mouseDY *= tp_mouseSensitivity;
+        mouseYaw = value;
+    }
+
+    void updateThirdPerson()
+    { 
+
+        float mouseDY = mouseYaw * -tp_mouseSensitivity;
         tp_currentAngleY += mouseDY;
 
         if (tp_currentAngleY > tp_maxCameraAngleY)
@@ -56,7 +63,8 @@ public class CharacterCamera : MonoBehaviour
 
     void updateFirstPerson()
     {
-        float camDY = Input.GetAxis("Mouse Y") * -fp_mouseSensitivity;
+        //float camDY = Input.GetAxis("Mouse Y") * -fp_mouseSensitivity;
+        float camDY = mouseYaw * -fp_mouseSensitivity;
         fp_currentAngleY += camDY;
         if (fp_currentAngleY > fp_maxCameraAngleY)
         {
@@ -77,11 +85,12 @@ public class CharacterCamera : MonoBehaviour
 
     void Update()
     {
-
+        /*
         if (Input.GetKeyDown(KeyCode.P))
         {
             isFirstPerson = !isFirstPerson;
         }
+        */
 
         if (isFirstPerson)
         {
