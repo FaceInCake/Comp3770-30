@@ -10,9 +10,16 @@ public class Alive : MonoBehaviour
     private float currentHealth;
 
 
+    public delegate void Died(GameObject entity);
+    public static event Died OnDeath;
+
     static void entityHasDiedCallback(GameObject entity)
     {
-        Object.Destroy(entity);
+        //Object.Destroy(entity);
+        if (OnDeath != null)
+        {
+            OnDeath(entity);
+        }
     }
 
 
