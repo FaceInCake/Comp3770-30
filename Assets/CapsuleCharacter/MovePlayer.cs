@@ -11,7 +11,7 @@ public class MovePlayer : MonoBehaviour
     public float jumpVelocity;
     public float mouseSensitivityX;
 
-    float speedModifier = 1.0f; // multiplies acceleration
+    private float speedModifier = 1.0f; // multiplies acceleration
     
     private bool isGrounded = true;
     private Vector3 velocity = Vector3.zero;
@@ -136,8 +136,32 @@ public class MovePlayer : MonoBehaviour
         moveUpdate();
         jumpUpdate();
 
+        updateSpeedModifier();
+
         controller.Move(velocity * Time.deltaTime);
 
+    }
+
+    void updateSpeedModifier()
+    {
+        if (currentSpeedModifierTime > -0.5f)
+        {
+            currentSpeedModifierTime += Time.deltaTime;
+            if (currentSpeedModifierTime > currentSpeedModifierMaxTime)
+            {
+                currentSpeedModifierTime = -1.0f;
+                speedModifier = 1.0f;
+            }
+        }
+    }
+
+    private float currentSpeedModifierTime = 0.0f;
+    private float currentSpeedModifierMaxTime = 0.0f;
+    public void applySpeedModifier(float modifier, float time)
+    {
+        speedModifier = modifier;
+        currentSpeedModifierTime = 0.0f;
+        currentSpeedModifierMaxTime = time;
     }
 
 }
