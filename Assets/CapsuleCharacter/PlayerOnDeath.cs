@@ -23,7 +23,7 @@ public class PlayerOnDeath : MonoBehaviour
         {
             Debug.Log("Player has died");
             Alive.OnDeath -= playerDeath;
-            life.enabled = false;
+            //life.enabled = false;
         }
     }
 

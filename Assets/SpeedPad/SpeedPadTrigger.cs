@@ -20,7 +20,6 @@ public class SpeedPadTrigger : MonoBehaviour
 
     void OnTriggerEnter(Collider c)
     {
-
         if (c.tag == "Player")
         {
             player.GetComponent<MovePlayer>().applySpeedModifier(speedBoost, boostTime);
