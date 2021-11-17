@@ -89,4 +89,9 @@ public class Alive : MonoBehaviour
         return currentHealth;
     }
 
+    public float getMaxHealth()
+    {
+        return maxHealth;
+    }
+
 }
