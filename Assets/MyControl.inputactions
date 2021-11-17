@@ -139,6 +139,33 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "Gun",
+            "id": "6b4e10c8-4851-4407-9d77-a7524ddf60a5",
+            "actions": [
+                {
+                    "name": "Fire",
+                    "type": "Button",
+                    "id": "5df453d4-4f46-4475-8b1f-d1eeeffacf7c",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "32632d1d-615c-4f61-9fce-69010bdc77b1",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Fire",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": []
