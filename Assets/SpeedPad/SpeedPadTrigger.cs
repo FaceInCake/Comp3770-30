@@ -13,11 +13,6 @@ public class SpeedPadTrigger : MonoBehaviour
         player = GameObject.Find("Player").transform.GetChild(0).gameObject;
     }
 
-    void Update()
-    {
-        
-    }
-
     void OnTriggerEnter(Collider c)
     {
         if (c.tag == "Player")
