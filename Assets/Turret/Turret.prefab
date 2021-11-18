@@ -46,7 +46,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1036524be3ca4ff459a749a0297c2c3c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initialMaxHealth: 300
+  maxHealth: 150
+  currentHealth: 150
 --- !u!114 &5918011233994502306
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -59,10 +60,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b29b76d1f00c4ea4ca00128834dff317, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  range: 10
-  bulletsPerSecond: 1
-  damage: 30
-  rotationSpeed: 50
+  range: 20
+  bulletsPerSecond: 2
+  damage: 4
+  rotationSpeed: 150
 --- !u!1 &789263037231145069
 GameObject:
   m_ObjectHideFlags: 0

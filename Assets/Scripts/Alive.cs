@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class Alive : MonoBehaviour
 {
-
-    public float initialMaxHealth;
+    [SerializeField]
     private float maxHealth;
+    [SerializeField]
     private float currentHealth;
 
 
@@ -25,12 +25,6 @@ public class Alive : MonoBehaviour
 
     void Start()
     {
-        if (initialMaxHealth <= 0)
-        {
-            entityHasDiedCallback(gameObject);
-        }
-
-        maxHealth = initialMaxHealth; // maxHealth is seperate from initialMaxHealth to privatize the maxHealth member. Otherwise currentHealth would have to be compared in Update()
         currentHealth = maxHealth;
     }
 

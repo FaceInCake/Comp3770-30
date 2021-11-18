@@ -5,45 +5,35 @@ using UnityEngine.InputSystem;
 
 public class gun : MonoBehaviour
 {
-    public float range = 100f;
-    public float damage = 10f;
-    public int currentAmmo = 10;
-    public int magazineSize = 36;
+    public float range;
+    public float damage;
+    public int maxAmmo;
+    public int currentAmmo;
+    private Camera playerCamera;
 
-
-    public Camera playerCamera;
-
+    private void Start() {
+        playerCamera = transform.parent.GetComponentInChildren<Camera>();
+        currentAmmo = maxAmmo;
     // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     public void OnFire()
     {
-        Debug.Log("Shots fired!!");
-        RaycastHit hit;
-
-        if(Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit, range))
-        {
-            Debug.Log(hit.transform.name);
-            Alive entity = hit.transform.GetComponent<Alive>();
-
-            if (currentAmmo > 0 && entity != null)
-            {
-                entity.dealDamage(damage);
-                
-            }
-        }
-
-        if(currentAmmo == 0)
-        {
-            Debug.Log("No ammo!!!");
-        }
-
+        // Must have a linked camera and some bullets
+        if (!playerCamera
+        || currentAmmo<=0) return;
 
         currentAmmo--;
-
+        RaycastHit hit;
+        if(Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit, range))
+        {
+            // We got a hit, go up the Parents trying to find an Alive component
+            Transform target = hit.transform;
+            Alive entity = target.GetComponentInParent<Alive>();
+            if (entity) {
+                entity.dealDamage(damage);
+            }
+        }
 
     }
 }
