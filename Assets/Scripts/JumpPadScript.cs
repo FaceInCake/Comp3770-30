@@ -2,24 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class jumpPad : MonoBehaviour
+public class JumpPadScript : MonoBehaviour
 {
-    public GameObject player;
     Vector3 direction;
-    public float jumpForce = 5f;
+    public float jumpForce;
     
     private void Start() {
         direction = transform.TransformDirection(Vector3.up*jumpForce);
     }
 
-    void OnCollisionEnter(Collision collision)
+    void OnTriggerEnter(Collider col)
     {
         //make's sure the object is the player
-        if (collision.gameObject.CompareTag("Player")) 
+        if (col.CompareTag("Player")) 
         {
-            player = collision.gameObject;
             //allows player to jump
-            player.GetComponentInChildren<Rigidbody>().AddForce(direction, ForceMode.Impulse);
+            col.GetComponentInChildren<MovePlayer>().velocity.y += jumpForce;
         }
     }
 }

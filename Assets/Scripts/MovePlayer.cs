@@ -14,7 +14,7 @@ public class MovePlayer : MonoBehaviour
     private float speedModifier = 1.0f; // multiplies acceleration
     
     private bool isGrounded = true;
-    private Vector3 velocity = Vector3.zero;
+    public Vector3 velocity = Vector3.zero;
     
     CharacterController controller;
     GameObject camera;
