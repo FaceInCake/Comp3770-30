@@ -62,6 +62,7 @@ public class TurretBrain : MonoBehaviour
             {
                 timeCounter = 0;
                 pAlive.dealDamage(damage);
+                GameEvents.current.TakeDamage(damage);
                 setMussleFlashVisible(true);
                 bang.Play(0);
             }

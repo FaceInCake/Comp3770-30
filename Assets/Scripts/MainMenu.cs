@@ -42,5 +42,10 @@ public class MainMenu : MonoBehaviour
         //gameover = true;
     }
 
+    public void ReturnToMain()
+    {
+        SceneManager.LoadScene("MainMenu");
+    }
+
 
 }

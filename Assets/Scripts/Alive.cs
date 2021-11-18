@@ -35,6 +35,10 @@ public class Alive : MonoBehaviour
         currentHealth -= damage;
         if (currentHealth <= 0)
         {
+            if(gameObject != GameObject.Find("Player"))
+            {
+                GameEvents.current.KilledEnemies();
+            }
             entityHasDiedCallback(gameObject);
         }
     }

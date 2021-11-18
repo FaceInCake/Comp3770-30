@@ -66,6 +66,8 @@ public class HealthPickupBrain : MonoBehaviour
         {
             c.transform.parent.gameObject.GetComponent<Alive>().heal(c.transform.parent.gameObject.GetComponent<Alive>().getMaxHealth());
             respawnTimer = 0.0f;
+
+            GameEvents.current.HealthPickUp();
         }
     }
 
