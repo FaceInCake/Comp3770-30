@@ -9,12 +9,13 @@ public class gun : MonoBehaviour
     public float damage;
     public int maxAmmo;
     public int currentAmmo;
+    private AudioSource gunfire;
     private Camera playerCamera;
 
     private void Start() {
         playerCamera = transform.parent.GetComponentInChildren<Camera>();
         currentAmmo = maxAmmo;
-    // Update is called once per frame
+        gunfire = GetComponent<AudioSource>();
     }
 
     public void OnFire()
@@ -24,6 +25,7 @@ public class gun : MonoBehaviour
         || currentAmmo<=0) return;
 
         currentAmmo--;
+        gunfire.Play(0);
         RaycastHit hit;
         if(Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit, range))
         {

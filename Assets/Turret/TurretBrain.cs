@@ -11,18 +11,23 @@ public class TurretBrain : MonoBehaviour
     public float rotationSpeed;
 
     GameObject player;
+    private Alive pAlive;
 
     GameObject turretBase;
     GameObject turretHead;
     GameObject muzzleFlash;
+    AudioSource bang;
 
     void Start()
     {
-        turretBase = gameObject.transform.GetChild(0).gameObject;
-        turretHead = gameObject.transform.GetChild(1).gameObject;
+        turretBase = transform.GetChild(0).gameObject;
+        turretHead = transform.GetChild(1).gameObject;
         muzzleFlash = turretHead.transform.GetChild(0).gameObject;
+        // Bang sound effect should be in the Head object
+        bang = transform.GetChild(1).GetComponent<AudioSource>();
 
-        player = GameObject.Find("Player");
+        player = GameObject.Find("Player").transform.GetChild(0).gameObject;
+        pAlive = player.GetComponent<Alive>();
 
         foreach (Transform t in muzzleFlash.transform)
         {
@@ -56,8 +61,9 @@ public class TurretBrain : MonoBehaviour
             if (timeCounter > 1.0f / bulletsPerSecond)
             {
                 timeCounter = 0;
-                player.GetComponent<Alive>().dealDamage(damage);
+                pAlive.dealDamage(damage);
                 setMussleFlashVisible(true);
+                bang.Play(0);
             }
 
         }
