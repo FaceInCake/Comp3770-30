@@ -5,17 +5,14 @@ using UnityEngine.SceneManagement;
 
 public class EndPointTrigger : MonoBehaviour
 {
-    void Start()
-    {
-        
-    }
-
+    [SerializeField]
+    private string toLoad;
 
     void OnTriggerEnter(Collider c)
     {
-        if (c.tag == "Player")
+        if (c.tag == "Player" && toLoad!=null)
         {
-            SceneManager.LoadScene(sceneName:"Level2");
+            SceneManager.LoadScene(sceneName:toLoad);
         }
     }
 
