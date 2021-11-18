@@ -27,7 +27,7 @@ public class TurretBrain : MonoBehaviour
         bang = transform.GetChild(1).GetComponent<AudioSource>();
 
         player = GameObject.Find("Player").transform.GetChild(0).gameObject;
-        pAlive = player.GetComponent<Alive>();
+        pAlive = GameObject.Find("Player").GetComponent<Alive>();
 
         foreach (Transform t in muzzleFlash.transform)
         {
