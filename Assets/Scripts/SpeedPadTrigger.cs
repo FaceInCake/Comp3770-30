@@ -17,7 +17,7 @@ public class SpeedPadTrigger : MonoBehaviour
     {
         if (c.tag == "Player")
         {
-            player.GetComponent<MovePlayer>().applySpeedModifier(speedBoost, boostTime);
+            //player.GetComponent<MovePlayer>().applySpeedModifier(speedBoost, boostTime);
         }
     }
 

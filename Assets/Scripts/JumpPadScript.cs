@@ -17,7 +17,7 @@ public class JumpPadScript : MonoBehaviour
         if (col.CompareTag("Player")) 
         {
             //allows player to jump
-            col.GetComponentInChildren<MovePlayer>().velocity.y += jumpForce;
+            //col.GetComponentInChildren<MovePlayer>().velocity.y += jumpForce;
         }
     }
 }
