@@ -152,6 +152,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8365358f541e3724d942349bdfc9ca78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  numberOfRooms: 15
   startingRoomRef: {fileID: 1337788454516124960, guid: 10ec087a96edb804da337ebcb106191a, type: 3}
   endingRoom: {fileID: 1337788454516124960, guid: b63afe28d25932b4494032f5da0badca, type: 3}
   rooms:

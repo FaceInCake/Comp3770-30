@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class ProceduralLevelGenerator : MonoBehaviour
 {
+    public int numberOfRooms = 10;
 
     public GameObject startingRoomRef;
     public GameObject endingRoom;
@@ -16,7 +17,7 @@ public class ProceduralLevelGenerator : MonoBehaviour
 
     void Start()
     {
-        generateNewLevel(10);
+        generateNewLevel(numberOfRooms);
     }
 
     void clearLevel()
