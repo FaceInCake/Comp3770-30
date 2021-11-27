@@ -15,9 +15,26 @@ public class ProceduralLevelGenerator : MonoBehaviour
     const int gridHeight = 10;
     GameObject[,] grid = new GameObject[gridWidth, gridHeight];
 
+    GameObject root;
+
     void Start()
     {
+        root = new GameObject("GeneratedLevel");
         generateNewLevel(numberOfRooms);
+    }
+
+    int frame = 0;
+    void Update()
+    {
+        // this is just to test the level generation, it generates a new level every 3 seconds
+
+        frame++;
+
+        if (frame == 60 * 3)
+        {
+            frame = 0;
+            generateNewLevel(numberOfRooms);
+        }
     }
 
     void clearLevel()
@@ -40,6 +57,7 @@ public class ProceduralLevelGenerator : MonoBehaviour
         clearLevel();
 
         GameObject sRoom = (GameObject)Instantiate(startingRoomRef, new Vector3(0, 0, 0), Quaternion.identity);
+        sRoom.transform.parent = root.transform;
         sRoom.GetComponent<RoomBrain>().init();
         grid[2, 2] = sRoom;
 
@@ -118,6 +136,7 @@ public class ProceduralLevelGenerator : MonoBehaviour
     {
         int rrIndex = Random.Range(0, rooms.Length);
         GameObject randRoom = (GameObject)Instantiate(rooms[rrIndex], new Vector3((x - 2) * 20, 0, (y - 2) * 20), Quaternion.identity);
+        randRoom.transform.parent = root.transform;
 
         grid[x, y] = randRoom;
         grid[x, y].GetComponent<RoomBrain>().init();
@@ -126,6 +145,7 @@ public class ProceduralLevelGenerator : MonoBehaviour
     void addEndRoom(int x, int y)
     {
         grid[x, y] = (GameObject)Instantiate(endingRoom, new Vector3((x - 2) * 20, 0, (y - 2) * 20), Quaternion.identity); ;
+        grid[x, y].transform.parent = root.transform;
         grid[x, y].GetComponent<RoomBrain>().init();
     }
 
