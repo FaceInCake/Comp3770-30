@@ -26,17 +26,25 @@ public class ProceduralLevelGenerator : MonoBehaviour
         generateNewLevel(numberOfRooms);
     }
 
-    int frame = 0;
+    int frame = -1;
     void Update()
     {
-        // this is just to test the level generation, it generates a new level every 3 seconds
-
-        frame++;
-
-        if (frame == 60 * 3)
+        if (Input.GetKeyDown(KeyCode.K))
         {
+            generateNewLevel(numberOfRooms);
             frame = 0;
-            //generateNewLevel(numberOfRooms);
+        }
+
+        if (frame >= 0)
+        {
+            frame++;
+        }
+
+        if (frame == 2)
+        {
+            surface.BuildNavMesh();
+
+            frame = -1;
         }
     }
 
@@ -48,8 +56,19 @@ public class ProceduralLevelGenerator : MonoBehaviour
             {
                 if (grid[i, j] != null)
                 {
-                    Destroy(grid[i, j]);
-                    grid[i, j] = null;
+                    if (i == 2 && j == 2)
+                    {
+                        // don't delete the starting room, just close its doors
+                        grid[i, j].GetComponent<RoomBrain>().closeDoorPZ();
+                        grid[i, j].GetComponent<RoomBrain>().closeDoorNZ();
+                        grid[i, j].GetComponent<RoomBrain>().closeDoorPX();
+                        grid[i, j].GetComponent<RoomBrain>().closeDoorNX();
+                    }
+                    else
+                    {
+                        Destroy(grid[i, j]);
+                        grid[i, j] = null;
+                    }
                 }
             }
         }
