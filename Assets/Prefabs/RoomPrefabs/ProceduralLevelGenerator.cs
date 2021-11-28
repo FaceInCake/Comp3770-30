@@ -1,10 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class ProceduralLevelGenerator : MonoBehaviour
 {
     public int numberOfRooms = 10;
+
+    public NavMeshSurface surface;
 
     public GameObject startingRoomRef;
     public GameObject endingRoom;
@@ -33,7 +36,7 @@ public class ProceduralLevelGenerator : MonoBehaviour
         if (frame == 60 * 3)
         {
             frame = 0;
-            generateNewLevel(numberOfRooms);
+            //generateNewLevel(numberOfRooms);
         }
     }
 
@@ -56,7 +59,7 @@ public class ProceduralLevelGenerator : MonoBehaviour
     {
         clearLevel();
 
-        GameObject sRoom = (GameObject)Instantiate(startingRoomRef, new Vector3(0, 0, 0), Quaternion.identity);
+        GameObject sRoom = GameObject.Find("StartingRoom");
         sRoom.transform.parent = root.transform;
         sRoom.GetComponent<RoomBrain>().init();
         grid[2, 2] = sRoom;
@@ -105,6 +108,8 @@ public class ProceduralLevelGenerator : MonoBehaviour
             }
 
         }
+
+        surface.BuildNavMesh();
 
     }
 
