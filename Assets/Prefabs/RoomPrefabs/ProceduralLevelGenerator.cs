@@ -11,6 +11,7 @@ public class ProceduralLevelGenerator : MonoBehaviour
 
     public GameObject startingRoomRef;
     public GameObject endingRoom;
+    int endRoomX, endRoomY;
 
     public GameObject[] rooms;
 
@@ -20,10 +21,15 @@ public class ProceduralLevelGenerator : MonoBehaviour
 
     GameObject root;
 
+    public GameObject player; 
+    Vector3 initialPlayerPosition;
+
     void Start()
     {
         root = new GameObject("GeneratedLevel");
         generateNewLevel(numberOfRooms);
+
+        initialPlayerPosition = player.transform.position;
     }
 
     int frame = -1;
@@ -32,6 +38,7 @@ public class ProceduralLevelGenerator : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.K))
         {
             generateNewLevel(numberOfRooms);
+            player.GetComponent<NavMeshAgent>().Warp(initialPlayerPosition);
             frame = 0;
         }
 
@@ -56,9 +63,9 @@ public class ProceduralLevelGenerator : MonoBehaviour
             {
                 if (grid[i, j] != null)
                 {
-                    if (i == 2 && j == 2)
+                    if ((i == 2 && j == 2) || (i == endRoomX && j == endRoomY))
                     {
-                        // don't delete the starting room, just close its doors
+                        // don't delete the starting room or ending room, just close its doors
                         grid[i, j].GetComponent<RoomBrain>().closeDoorPZ();
                         grid[i, j].GetComponent<RoomBrain>().closeDoorNZ();
                         grid[i, j].GetComponent<RoomBrain>().closeDoorPX();
@@ -74,7 +81,7 @@ public class ProceduralLevelGenerator : MonoBehaviour
         }
     }
 
-    void generateNewLevel(int numRooms)
+    public void generateNewLevel(int numRooms)
     {
         clearLevel();
 
@@ -132,6 +139,11 @@ public class ProceduralLevelGenerator : MonoBehaviour
 
     }
 
+    public void generateNavMesh()
+    {
+        surface.BuildNavMesh();
+    }
+
     void openDoors(int cx, int cy, int dx, int dy)
     {
         if (dx == 1)
@@ -168,9 +180,13 @@ public class ProceduralLevelGenerator : MonoBehaviour
 
     void addEndRoom(int x, int y)
     {
-        grid[x, y] = (GameObject)Instantiate(endingRoom, new Vector3((x - 2) * 20, 0, (y - 2) * 20), Quaternion.identity); ;
+        grid[endRoomX, endRoomY] = null;
+        grid[x, y] = endingRoom;
+        grid[x, y].transform.position = new Vector3((x - 2) * 20, 0, (y - 2) * 20);
         grid[x, y].transform.parent = root.transform;
         grid[x, y].GetComponent<RoomBrain>().init();
+        endRoomX = x;
+        endRoomY = y;
     }
 
 }
