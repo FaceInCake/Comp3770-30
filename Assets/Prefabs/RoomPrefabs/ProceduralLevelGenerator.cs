@@ -57,6 +57,8 @@ public class ProceduralLevelGenerator : MonoBehaviour
 
     void clearLevel()
     {
+        grid[endRoomX, endRoomY] = null;
+
         for (int i = 0; i < gridWidth; i++)
         {
             for (int j = 0; j < gridHeight; j++)
@@ -126,11 +128,13 @@ public class ProceduralLevelGenerator : MonoBehaviour
                 if (i == numRooms - 1)
                 {
                     addEndRoom(cx + dx, cy + dy);
+                    openDoors(cx, cy, dx, dy);
                 } else
                 {
                     addRandomRoom(cx + dx, cy + dy);
+                    openDoors(cx, cy, dx, dy);
                 }
-                openDoors(cx, cy, dx, dy);
+        
             }
 
         }
@@ -180,11 +184,17 @@ public class ProceduralLevelGenerator : MonoBehaviour
 
     void addEndRoom(int x, int y)
     {
-        grid[endRoomX, endRoomY] = null;
         grid[x, y] = endingRoom;
         grid[x, y].transform.position = new Vector3((x - 2) * 20, 0, (y - 2) * 20);
         grid[x, y].transform.parent = root.transform;
         grid[x, y].GetComponent<RoomBrain>().init();
+
+        grid[x, y].GetComponent<RoomBrain>().closeDoorPX();
+        grid[x, y].GetComponent<RoomBrain>().closeDoorNX();
+        grid[x, y].GetComponent<RoomBrain>().closeDoorPZ();
+        grid[x, y].GetComponent<RoomBrain>().closeDoorNZ();
+
+
         endRoomX = x;
         endRoomY = y;
     }
