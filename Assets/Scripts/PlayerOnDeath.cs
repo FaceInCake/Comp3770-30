@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerOnDeath : MonoBehaviour
 {
@@ -23,6 +24,9 @@ public class PlayerOnDeath : MonoBehaviour
             Debug.Log("Player has died");
             //Alive.OnDeath -= playerDeath;
             //life.enabled = false;
+
+            SceneManager.LoadScene("GameFinished");
+
         }
     }
 
