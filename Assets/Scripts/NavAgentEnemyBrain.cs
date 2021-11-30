@@ -6,16 +6,26 @@ public class NavAgentEnemyBrain : MonoBehaviour
 {
 
     GameObject player;
-    public float trackingRadius = 5.0f;
+    Alive php; // Player health points
+    AudioSource sound_atk;
+    public float trackingRadius;
+    public float damage;
+    private float distToPlayer2; // Squared distance to player, used by private functions
 
     void Start()
     {
         player = GameObject.Find("Player");
+        php = player.GetComponent<Alive>();
+        sound_atk = gameObject.GetComponent<AudioSource>();
+        InvokeRepeating("attemptToAttackPlayer", Random.Range(0f,1f), 1.1f);
     }
 
     int frame = 0;
     void Update()
     {
+        // Must calculate before `trackPlayer()` and `attemptToAttackPlayer()`
+        distToPlayer2 = (transform.position - player.transform.position).sqrMagnitude;
+
         if (frame >= 0)
         {
             frame++;
@@ -32,6 +42,14 @@ public class NavAgentEnemyBrain : MonoBehaviour
         {
             trackPlayer();
         }
+
+    }
+
+    void attemptToAttackPlayer () {
+        if (distToPlayer2 < 4) { // Less than 2 units away
+            php.dealDamage(damage);
+            sound_atk.PlayOneShot(sound_atk.clip);
+        }
     }
 
     void setupNavMeshAgentComponent()
@@ -43,9 +61,7 @@ public class NavAgentEnemyBrain : MonoBehaviour
 
     void trackPlayer()
     {
-        float dx = player.transform.position.x - gameObject.transform.position.x;
-        float dy = player.transform.position.z - gameObject.transform.position.z;
-        if ((dx * dx) + (dy * dy) < (trackingRadius * trackingRadius))
+        if (distToPlayer2 < (trackingRadius * trackingRadius))
         {
             gameObject.GetComponent<UnityEngine.AI.NavMeshAgent>().SetDestination(player.transform.position);
         }
