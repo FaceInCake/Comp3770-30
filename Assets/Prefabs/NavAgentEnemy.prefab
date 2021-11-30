@@ -127,6 +127,7 @@ GameObject:
   - component: {fileID: 5215203092142279980}
   - component: {fileID: 2968608056343796859}
   - component: {fileID: 8139577200426554083}
+  - component: {fileID: 7675080392274487682}
   m_Layer: 0
   m_Name: Cylinder
   m_TagString: Untagged
@@ -224,10 +225,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b51fda9a6830304eb8725d551169957, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  trackingRadius: 10
-  damage: 6
---- !u!82 &8139577200426554083
-AudioSource:
+  trackingRadius: 5
+  attackRange: 1.5
+  attackDamage: 20
+  attackFrequencyInSeconds: 1
+--- !u!114 &7675080392274487682
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -322,6 +325,12 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1036524be3ca4ff459a749a0297c2c3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 100
+  currentHealth: 100
 --- !u!1 &3563078514021046391
 GameObject:
   m_ObjectHideFlags: 0

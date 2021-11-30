@@ -37,7 +37,7 @@ public class Alive : MonoBehaviour
         {
             if(gameObject != GameObject.Find("Player"))
             {
-                GameEvents.current.KilledEnemies();
+                //GameEvents.current.KilledEnemies();
             }
             entityHasDiedCallback(gameObject);
         }

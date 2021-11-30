@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.SceneManagement;
 
 public class PlayerOnDeath : MonoBehaviour
 {
@@ -23,10 +24,11 @@ public class PlayerOnDeath : MonoBehaviour
     {
         if (gameObject == entity)
         {
-            int roomsToGenerate = proceduralGenerator.GetComponent<ProceduralLevelGenerator>().numberOfRooms;
-            proceduralGenerator.GetComponent<ProceduralLevelGenerator>().generateNewLevel(roomsToGenerate);
-            gameObject.GetComponent<NavMeshAgent>().Warp(Vector3.zero);
-            life.setHealth(life.getMaxHealth());
+            Debug.Log("Player has died");
+            //Alive.OnDeath -= playerDeath;
+            //life.enabled = false;
+
+            SceneManager.LoadScene("GameFinished");
         }
     }
 

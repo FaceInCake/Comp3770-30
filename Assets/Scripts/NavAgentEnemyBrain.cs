@@ -6,26 +6,29 @@ public class NavAgentEnemyBrain : MonoBehaviour
 {
 
     GameObject player;
-    Alive php; // Player health points
     AudioSource sound_atk;
-    public float trackingRadius;
-    public float damage;
-    private float distToPlayer2; // Squared distance to player, used by private functions
+    public float trackingRadius = 5.0f;
+    public float attackRange = 1.5f;
+    public float attackDamage = 20;
+    public float attackFrequencyInSeconds = 1.0f;
+
+    Alive life;
+
+    bool dieNextFrame = false;
 
     void Start()
     {
         player = GameObject.Find("Player");
-        php = player.GetComponent<Alive>();
         sound_atk = gameObject.GetComponent<AudioSource>();
         InvokeRepeating("attemptToAttackPlayer", Random.Range(0f,1f), 1.1f);
+
+        life = gameObject.GetComponent<Alive>();
+        Alive.OnDeath += enemyDeath;
     }
 
     int frame = 0;
     void Update()
     {
-        // Must calculate before `trackPlayer()` and `attemptToAttackPlayer()`
-        distToPlayer2 = (transform.position - player.transform.position).sqrMagnitude;
-
         if (frame >= 0)
         {
             frame++;
@@ -41,6 +44,13 @@ public class NavAgentEnemyBrain : MonoBehaviour
         if (frame == -1)
         {
             trackPlayer();
+            attackPlayer();
+            getAttackedByPlayer();
+        }
+
+        if (dieNextFrame)
+        {
+            Destroy(gameObject);
         }
 
     }
@@ -70,6 +80,68 @@ public class NavAgentEnemyBrain : MonoBehaviour
             gameObject.GetComponent<UnityEngine.AI.NavMeshAgent>().SetDestination(gameObject.transform.position);
         }
 
+    }
+
+
+    float getAttackedTimer = 0.0f;
+    float getAttackedFrequency = 0.7f;
+    float playerDamage = 35;
+    float playerAttackRange = 2.0f;
+    void getAttackedByPlayer()
+    {
+
+        if (getAttackedTimer < getAttackedFrequency)
+        {
+            getAttackedTimer += Time.deltaTime;
+        } else
+        {
+
+            float dx = player.transform.position.x - gameObject.transform.position.x;
+            float dy = player.transform.position.z - gameObject.transform.position.z;
+            if ((dx * dx) + (dy * dy) < (playerAttackRange * playerAttackRange))
+            {
+                life.dealDamage(playerDamage);
+                getAttackedTimer = 0.0f;
+            }
+
+        }
+    }
+
+    float attackTimer = 0.0f;
+    void attackPlayer()
+    {
+        if (attackTimer < attackFrequencyInSeconds)
+        {
+            attackTimer += Time.deltaTime;
+        }
+        else
+        {
+
+            float dx = player.transform.position.x - gameObject.transform.position.x;
+            float dy = player.transform.position.z - gameObject.transform.position.z;
+            if ((dx * dx) + (dy * dy) < (attackRange * attackRange))
+            {
+                player.GetComponent<Alive>().dealDamage(attackDamage);
+            }
+
+            attackTimer = 0.0f;
+
+        }
+
+    }
+
+
+    private void OnDisable()
+    {
+        Alive.OnDeath -= enemyDeath;
+    }
+    
+    void enemyDeath(GameObject entity)
+    {
+        if (gameObject == entity)
+        {
+            dieNextFrame = true;
+        }
     }
 
 }
