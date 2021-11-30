@@ -20,7 +20,6 @@ public class NavAgentEnemyBrain : MonoBehaviour
     {
         player = GameObject.Find("Player");
         sound_atk = gameObject.GetComponent<AudioSource>();
-        InvokeRepeating("attemptToAttackPlayer", Random.Range(0f,1f), 1.1f);
 
         life = gameObject.GetComponent<Alive>();
         Alive.OnDeath += enemyDeath;
@@ -55,12 +54,6 @@ public class NavAgentEnemyBrain : MonoBehaviour
 
     }
 
-    void attemptToAttackPlayer () {
-        if (distToPlayer2 < 4) { // Less than 2 units away
-            php.dealDamage(damage);
-            sound_atk.PlayOneShot(sound_atk.clip);
-        }
-    }
 
     void setupNavMeshAgentComponent()
     {
@@ -71,7 +64,9 @@ public class NavAgentEnemyBrain : MonoBehaviour
 
     void trackPlayer()
     {
-        if (distToPlayer2 < (trackingRadius * trackingRadius))
+        float dx = player.transform.position.x - gameObject.transform.position.x;
+        float dy = player.transform.position.z - gameObject.transform.position.z;
+        if (dx * dx + dy * dy < (trackingRadius * trackingRadius))
         {
             gameObject.GetComponent<UnityEngine.AI.NavMeshAgent>().SetDestination(player.transform.position);
         }
@@ -122,6 +117,7 @@ public class NavAgentEnemyBrain : MonoBehaviour
             if ((dx * dx) + (dy * dy) < (attackRange * attackRange))
             {
                 player.GetComponent<Alive>().dealDamage(attackDamage);
+
             }
 
             attackTimer = 0.0f;
