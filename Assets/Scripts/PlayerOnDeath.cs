@@ -1,11 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.SceneManagement;
 
 public class PlayerOnDeath : MonoBehaviour
 {
     Alive life;
+    public GameObject proceduralGenerator;
+    
 
     void Start()
     {
@@ -26,7 +29,6 @@ public class PlayerOnDeath : MonoBehaviour
             //life.enabled = false;
 
             SceneManager.LoadScene("GameFinished");
-
         }
     }
 
