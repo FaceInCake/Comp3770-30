@@ -117,7 +117,7 @@ public class NavAgentEnemyBrain : MonoBehaviour
             if ((dx * dx) + (dy * dy) < (attackRange * attackRange))
             {
                 player.GetComponent<Alive>().dealDamage(attackDamage);
-
+                sound_atk.PlayOneShot(sound_atk.clip);
             }
 
             attackTimer = 0.0f;
