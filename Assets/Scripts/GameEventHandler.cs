@@ -26,8 +26,11 @@ public class GameEventHandler : MonoBehaviour
         GameEvents.current.onHealthPickUp += addHealthStat;
         GameEvents.current.enemiesKilled += addPlayerDamageStat;
         GameEvents.current.playerDamage += addEnemyDamageStat;
-        GameEvents.current.timeTaken += addTime;
 
+    }
+
+    private void Update() {
+        this.time += Time.deltaTime;
     }
 
     private void addHealthStat()
@@ -44,12 +47,5 @@ public class GameEventHandler : MonoBehaviour
     {
         damage += damageTaken;
     }
-
-    private void addTime(float timeTaken)
-    {
-        time += timeTaken;
-    }
-
-
 
 }

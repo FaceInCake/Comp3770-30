@@ -9,6 +9,7 @@ public class Alive : MonoBehaviour
     [SerializeField]
     private float currentHealth;
 
+    GameObject player;
 
     public delegate void Died(GameObject entity);
     public static event Died OnDeath;
@@ -26,6 +27,7 @@ public class Alive : MonoBehaviour
     void Start()
     {
         currentHealth = maxHealth;
+        player = GameObject.Find("Player");
     }
 
     public void dealDamage(float damage)
@@ -33,11 +35,12 @@ public class Alive : MonoBehaviour
         if (damage < 0) return; // prevents healing through this function
 
         currentHealth -= damage;
+        if (gameObject == player)
+            GameEvents.current.TakeDamage(damage);
         if (currentHealth <= 0)
         {
-            if(gameObject != GameObject.Find("Player"))
-            {
-                //GameEvents.current.KilledEnemies();
+            if(gameObject != player) {
+                GameEvents.current.KilledEnemies();
             }
             entityHasDiedCallback(gameObject);
         }

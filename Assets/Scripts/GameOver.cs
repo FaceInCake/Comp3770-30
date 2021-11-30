@@ -15,13 +15,12 @@ public class GameOver : MonoBehaviour
     {
         
         
-        eventHandler = GameObject.Find("EventManager");
+        eventHandler = GameObject.Find("ScoreKeeper");
+        if (eventHandler==null) {
+            Destroy(gameObject);
+            return;
+        }
         eH = eventHandler.GetComponent<GameEventHandler>();
-        gameObject.GetComponent<Text>().fontSize = 30;
-        gameObject.GetComponent<Text>().alignment = TextAnchor.MiddleCenter;
-        gameObject.GetComponent<Text>().lineSpacing = 4;
-
-
 
     }
 
@@ -35,7 +34,7 @@ public class GameOver : MonoBehaviour
                                                 + " Damage Received : " + eH.damage + "\n"
                                                 +" Time taken to complete levels : " + ((int)eH.time/60).ToString() + ":" + (eH.time%60).ToString("f2");
 
-        Destroy(GameObject.Find("EventManager"));
+        Destroy(eventHandler);
     }
 
 }
