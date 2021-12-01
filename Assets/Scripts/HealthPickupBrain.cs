@@ -62,9 +62,9 @@ public class HealthPickupBrain : MonoBehaviour
     public void handleTriggerEnter(Collider c)
     {
 
-        if (c.transform.parent.gameObject.GetComponent<Alive>() != null && respawnTimer < -0.5f)
+        if (c.gameObject.GetComponent<Alive>() && respawnTimer < -0.5f)
         {
-            c.transform.parent.gameObject.GetComponent<Alive>().heal(c.transform.parent.gameObject.GetComponent<Alive>().getMaxHealth());
+            c.gameObject.GetComponent<Alive>().heal(c.gameObject.GetComponent<Alive>().getMaxHealth());
             respawnTimer = 0.0f;
 
             GameEvents.current.HealthPickUp();

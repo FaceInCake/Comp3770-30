@@ -614,6 +614,7 @@ GameObject:
   - component: {fileID: 5409218398526264782}
   - component: {fileID: 3987966919795802452}
   - component: {fileID: 1431093314644017934}
+  - component: {fileID: 8182367363373951232}
   m_Layer: 0
   m_Name: TriggerArea
   m_TagString: Untagged
@@ -710,6 +711,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5405d9e611b33f4995657f7a47d0a49, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!54 &8182367363373951232
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8149464324198502829}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &9011088933409776669
 GameObject:
   m_ObjectHideFlags: 0
