@@ -10,6 +10,11 @@ public class Pause : MonoBehaviour
 
     public GameObject pauseMenuUI;
 
+
+    private void Awake()
+    {
+        DontDestroyOnLoad(gameObject);
+    }
     // Update is called once per frame
     void Update()
     {
@@ -42,6 +47,7 @@ public class Pause : MonoBehaviour
 
     public void quitGame()
     {
+        Destroy(gameObject);
         SceneManager.LoadScene("GameFinished");
     }
 }
