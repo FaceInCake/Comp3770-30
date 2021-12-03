@@ -29,7 +29,7 @@ public class MainMenu : MonoBehaviour
         //    SceneManager.LoadScene("Level1");
         //    Debug.Log("Level One Loaded!!!");
         //}
-        SceneManager.LoadScene("Level1");
+        SceneManager.LoadScene("Arena");
         Debug.Log("Level One Loaded!!!");
 
     }
