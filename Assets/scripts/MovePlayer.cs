@@ -11,6 +11,9 @@ public class MovePlayer : NetworkBehaviour
     public float jumpVelocity;
     public float mouseSensitivityX;
 
+    public float respawnTime = 2.0f;
+    float currentRespawnTimer = -1.0f;
+
     private float speedModifier = 1.0f; // multiplies acceleration
     
     private bool isGrounded = true;
@@ -18,19 +21,22 @@ public class MovePlayer : NetworkBehaviour
     
     CharacterController controller;
     GameObject camera;
+    Alive health;
+    GameObject body;
 
     void Start()
     {
         controller = gameObject.GetComponent<CharacterController>();
         camera = gameObject.transform.GetChild(1).gameObject;
+        health = gameObject.GetComponent<Alive>();
+        health.setMaxHealth(400);
+        body = gameObject.transform.GetChild(0).gameObject;
 
         if (!isLocalPlayer)
         {
             camera.SetActive(false);
         }
     }
-
-
 
     public Vector3 getForward()
     {
@@ -138,6 +144,22 @@ public class MovePlayer : NetworkBehaviour
             return;
         }
 
+        if (currentRespawnTimer > respawnTime)
+        {
+            resetRespawnTimer();
+        }
+
+        Vector2 mouseMovement = new Vector2();
+        mouseMovement.x = Input.GetAxis("Mouse X");
+        mouseMovement.y = Input.GetAxis("Mouse Y");
+        OnLook(mouseMovement);
+
+        if (currentRespawnTimer >= 0.0f)
+        {
+            currentRespawnTimer += Time.deltaTime;
+            return;
+        }
+
         isGrounded = controller.isGrounded;
 
         applyGravity();
@@ -151,11 +173,6 @@ public class MovePlayer : NetworkBehaviour
         OnMove(dir.normalized);
 
         if (Input.GetKeyDown(KeyCode.Space)) OnJump();
-
-        Vector2 mouseMovement = new Vector2();
-        mouseMovement.x = Input.GetAxis("Mouse X");
-        mouseMovement.y = Input.GetAxis("Mouse Y");
-        OnLook(mouseMovement);
 
 
         moveUpdate();
@@ -187,6 +204,21 @@ public class MovePlayer : NetworkBehaviour
         speedModifier = modifier;
         currentSpeedModifierTime = 0.0f;
         currentSpeedModifierMaxTime = time;
+    }
+
+
+    // called by PlayerOnDeath
+    public void hasDied()
+    {
+        currentRespawnTimer = 0.0f;
+        body.GetComponent<MeshRenderer>().enabled = false;
+    }
+
+    // called automatically
+    public void resetRespawnTimer()
+    {
+        currentRespawnTimer = -1.0f;
+        body.GetComponent<MeshRenderer>().enabled = true;
     }
 
 }
