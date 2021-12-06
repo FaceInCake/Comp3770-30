@@ -48,12 +48,14 @@ public class PlayerOnDeath : NetworkBehaviour
 
             bool onRedTeam = playerBrain.onRedTeam;
 
-            player.GetComponent<CharacterController>().enabled = false;
-            Vector3 newPos = teamManager.getClosestRespawnPoint(player.transform.position, onRedTeam);
-            player.GetComponent<CharacterController>().enabled = true;
+            GameObject possibleFlag = playerBrain.getHeldFlag();
+            if (possibleFlag != null)
+            {
+                possibleFlag.GetComponent<CaptureFlagBrain>().dropFlag();
+            }
 
-            newPos.y += 1.0f;
-            player.transform.position = newPos;
+            
+            teamManager.teleportPlayerToClosestSpawnPoint(gameObject);
 
             playerBrain.hideHat();
 

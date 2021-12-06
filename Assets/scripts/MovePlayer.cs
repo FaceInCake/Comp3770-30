@@ -201,6 +201,9 @@ public class MovePlayer : NetworkBehaviour
     private float currentSpeedModifierMaxTime = 0.0f;
     public void applySpeedModifier(float modifier, float time)
     {
+        if (!isLocalPlayer)
+            return;
+
         speedModifier = modifier;
         currentSpeedModifierTime = 0.0f;
         currentSpeedModifierMaxTime = time;
@@ -210,6 +213,9 @@ public class MovePlayer : NetworkBehaviour
     // called by PlayerOnDeath
     public void hasDied()
     {
+        if (!isLocalPlayer)
+            return;
+
         currentRespawnTimer = 0.0f;
         body.GetComponent<MeshRenderer>().enabled = false;
     }
@@ -217,6 +223,9 @@ public class MovePlayer : NetworkBehaviour
     // called automatically
     public void resetRespawnTimer()
     {
+        if (!isLocalPlayer)
+            return;
+
         currentRespawnTimer = -1.0f;
         body.GetComponent<MeshRenderer>().enabled = true;
 

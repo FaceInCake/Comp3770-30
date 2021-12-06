@@ -1,16 +1,26 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Mirror;
 
-public class TeamManager : MonoBehaviour
+public class TeamManager : NetworkBehaviour
 {
 
     List<GameObject> players;
+
+    [SyncVar]
     int blueTeamPoints = 0;
+    [SyncVar]
     int redTeamPoints = 0;
 
     List<Transform> redRespawnPoints;
     List<Transform> blueRespawnPoints;
+
+    public GameObject redTeamFlag;
+    public GameObject blueTeamFlag;
+    public GameObject redTeamBase;
+    public GameObject blueTeamBase;
+
 
     public bool friendlyFireEnabled = false;
 
@@ -97,49 +107,46 @@ public class TeamManager : MonoBehaviour
         }
     }
 
-    public Vector3 getClosestRespawnPoint(Vector3 point, bool redTeam)
+    public GameObject getClosestRespawnPoint(Vector3 point, bool redTeam)
     {
+        List<Transform> respawnPoints;
         if (redTeam)
+            respawnPoints = redRespawnPoints;
+        else
+            respawnPoints = blueRespawnPoints;
+
+        int closestIndex = -1;
+        float closestDx = 0.0f;
+        float closestDy = 0.0f;
+
+        for (int i = 0; i < respawnPoints.Count; i++)
         {
-            int closestIndex = 0;
-            float closestDx = redRespawnPoints[closestIndex].position.x - point.x;
-            float closestDy = redRespawnPoints[closestIndex].position.y - point.y;
+            float dx = respawnPoints[i].position.x - point.x;
+            float dy = respawnPoints[i].position.y - point.y;
 
-            for (int i = 1; i < redRespawnPoints.Count; i++)
+            if (closestIndex == -1 || (closestDx * closestDx + closestDy * closestDy > dx * dx + dy * dy))
             {
-                float dx = redRespawnPoints[i].position.x - point.x;
-                float dy = redRespawnPoints[i].position.y - point.y;
-
-                if (closestDx * closestDx + closestDy * closestDy > dx * dx + dy * dy)
+                if (!respawnPoints[i].gameObject.GetComponent<SpawnPointBrain>().isOccupied())
                 {
                     closestDx = dx;
                     closestDy = dy;
                     closestIndex = i;
                 }
             }
-
-            return redRespawnPoints[closestIndex].position;
-        } else
-        {
-            int closestIndex = 0;
-            float closestDx = blueRespawnPoints[closestIndex].position.x - point.x;
-            float closestDy = blueRespawnPoints[closestIndex].position.y - point.y;
-
-            for (int i = 1; i < blueRespawnPoints.Count; i++)
-            {
-                float dx = blueRespawnPoints[i].position.x - point.x;
-                float dy = blueRespawnPoints[i].position.y - point.y;
-
-                if (closestDx * closestDx + closestDy * closestDy > dx * dx + dy * dy)
-                {
-                    closestDx = dx;
-                    closestDy = dy;
-                    closestIndex = i;
-                }
-            }
-
-            return blueRespawnPoints[closestIndex].position;
         }
+
+        if (closestIndex == -1)
+        {
+            if (redTeam)
+                Debug.Log("There were no unoccupied red respawn points");
+            else
+                Debug.Log("There were no unoccupied blue respawn points");
+
+            return null;
+        }
+
+        return redRespawnPoints[closestIndex].gameObject;
+        
     }
 
     public int getRedPlayersCount()
@@ -166,6 +173,46 @@ public class TeamManager : MonoBehaviour
             }
         }
         return count;
+    }
+
+    // called after one of the teams gets a point
+    public void resetMatch()
+    {
+
+        redTeamBase.GetComponent<FlagBaseBrain>().returnFlagToBase();
+        blueTeamBase.GetComponent<FlagBaseBrain>().returnFlagToBase();
+
+        for (int i = 0; i < players.Count; i++)
+        {
+            teleportPlayerToClosestSpawnPoint(players[i]);
+        }
+
+        if (redTeamPoints >= 10 || blueTeamPoints >= 10)
+        {
+            gameOver();
+            return;
+        }
+    }
+
+    // called after one of the teams has ten points
+    public void gameOver()
+    {
+
+    }
+
+
+    public void teleportPlayerToClosestSpawnPoint(GameObject player)
+    {
+        player.GetComponent<CharacterController>().enabled = false;
+        GameObject spawnPoint = getClosestRespawnPoint(player.transform.position, player.GetComponent<PlayerBrain>().onRedTeam);
+
+        spawnPoint.GetComponent<SpawnPointBrain>().setOccupiedForTime(5.0f);
+
+        Vector3 newPos = spawnPoint.transform.position;
+        newPos.y += 1.0f;
+        player.transform.position = newPos;
+
+        player.GetComponent<CharacterController>().enabled = true;
     }
 
 }
