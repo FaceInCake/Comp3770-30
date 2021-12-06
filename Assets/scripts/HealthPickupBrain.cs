@@ -61,13 +61,22 @@ public class HealthPickupBrain : MonoBehaviour
     private float respawnTimer = -1.0f;
     public void handleTriggerEnter(Collider c)
     {
+        if (c.gameObject.GetComponent<Alive>() != null && respawnTimer < -0.5f)
+        {
+            c.gameObject.GetComponent<Alive>().heal(c.gameObject.GetComponent<Alive>().getMaxHealth() / 2.0f);
+            respawnTimer = 0.0f;
+
+            return;
+        }
+
 
         if (c.transform.parent.gameObject.GetComponent<Alive>() != null && respawnTimer < -0.5f)
         {
-            c.transform.parent.gameObject.GetComponent<Alive>().heal(c.transform.parent.gameObject.GetComponent<Alive>().getMaxHealth());
+            c.transform.parent.gameObject.GetComponent<Alive>().heal(c.transform.parent.gameObject.GetComponent<Alive>().getMaxHealth() / 2.0f);
             respawnTimer = 0.0f;
 
-            GameEvents.current.HealthPickUp();
+            //GameEvents.current.HealthPickUp();
+            return;
         }
     }
 
