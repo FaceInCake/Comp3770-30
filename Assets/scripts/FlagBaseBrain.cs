@@ -78,13 +78,13 @@ public class FlagBaseBrain : MonoBehaviour
                 if (isRed)
                 {
                     teamManager.addPointToRedTeam();
-                    player.GetComponent<PlayerBrain>().getHeldFlag().GetComponent<CaptureFlagBrain>().dropFlag();
+                    player.GetComponent<PlayerBrain>().getHeldFlag().GetComponent<CaptureFlagBrain>().dropFlag(player);
                     teamManager.GetComponent<TeamManager>().resetMatch();
                 }
                 else
                 {
                     teamManager.addPointToBlueTeam();
-                    player.GetComponent<PlayerBrain>().getHeldFlag().GetComponent<CaptureFlagBrain>().dropFlag();
+                    player.GetComponent<PlayerBrain>().getHeldFlag().GetComponent<CaptureFlagBrain>().dropFlag(player);
                     teamManager.GetComponent<TeamManager>().resetMatch();
                 }
             }
@@ -93,7 +93,6 @@ public class FlagBaseBrain : MonoBehaviour
 
     public void returnFlagToBase()
     {
-        flag.transform.parent = null;
         flag.transform.position = gameObject.transform.position;
     }
 

@@ -5,10 +5,14 @@ using Mirror;
 
 public class PlayerBrain : NetworkBehaviour
 {
+
     public bool onRedTeam;
 
     GameObject redHat;
     GameObject blueHat;
+
+
+    public GameObject heldFlag = null;
 
     void Start()
     { 
@@ -19,6 +23,19 @@ public class PlayerBrain : NetworkBehaviour
         blueHat = gameObject.transform.Find("BlueHat").gameObject;
 
         showHat();
+
+    }
+
+    void Update()
+    {
+        if (!isLocalPlayer)
+            return;
+
+
+        if (heldFlag != null)
+        {
+            heldFlag.transform.position = gameObject.transform.position;
+        }
 
     }
 
@@ -54,24 +71,7 @@ public class PlayerBrain : NetworkBehaviour
 
     public GameObject getHeldFlag()
     {
-        if (onRedTeam)
-        {
-            Transform possibleFlag = gameObject.transform.Find("BlueTeamCaptureFlag");
-            if (possibleFlag != null)
-            {
-                return possibleFlag.gameObject;
-            }
-        }
-        else
-        {
-            Transform possibleFlag = gameObject.transform.Find("RedTeamCaptureFlag");
-            if (possibleFlag != null)
-            {
-                return possibleFlag.gameObject;
-            }
-        }
-
-        return null;
+        return heldFlag;
     }
 
 

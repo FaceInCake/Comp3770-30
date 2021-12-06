@@ -51,7 +51,7 @@ public class PlayerOnDeath : NetworkBehaviour
             GameObject possibleFlag = playerBrain.getHeldFlag();
             if (possibleFlag != null)
             {
-                possibleFlag.GetComponent<CaptureFlagBrain>().dropFlag();
+                possibleFlag.GetComponent<CaptureFlagBrain>().dropFlag(gameObject);
             }
 
             

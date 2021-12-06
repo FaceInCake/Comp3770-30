@@ -145,7 +145,7 @@ public class TeamManager : NetworkBehaviour
             return null;
         }
 
-        return redRespawnPoints[closestIndex].gameObject;
+        return respawnPoints[closestIndex].gameObject;
         
     }
 

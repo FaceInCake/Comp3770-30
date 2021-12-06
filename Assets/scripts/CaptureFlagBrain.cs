@@ -80,19 +80,17 @@ public class CaptureFlagBrain : NetworkBehaviour
         if ((playerIsRed && !isRed) || (!playerIsRed && isRed))
         {
             // enemy has collided with this flag, stick onto them
-            gameObject.transform.parent = player.transform;
+            player.GetComponent<PlayerBrain>().heldFlag = gameObject;
             isPickedUp = true;
             return;
         }
 
     }
 
-    public void dropFlag()
+    public void dropFlag(GameObject player)
     {
-        // the player carrying this flag has died, unstick from them
-        gameObject.transform.parent = null;
         isPickedUp = false;
-
+        player.GetComponent<PlayerBrain>().heldFlag = null;
     }
 
 }
