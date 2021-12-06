@@ -6,17 +6,29 @@ using Mirror;
 public class PlayerOnDeath : NetworkBehaviour
 {
     Alive life;
-    RespawnManager respawnManager;
+    TeamManager teamManager;
     GameObject player;
+    PlayerBrain playerBrain;
 
     void Start()
     {
         life = gameObject.GetComponent<Alive>();
         Alive.OnDeath += playerDeath;
 
-        respawnManager = GameObject.Find("RespawnManager").GetComponent<RespawnManager>();
+        teamManager = GameObject.Find("TeamManager").GetComponent<TeamManager>();
 
         player = gameObject;
+
+        playerBrain = player.GetComponent<PlayerBrain>();
+
+
+        if (teamManager.getRedPlayersCount() > teamManager.getBluePlayersCount())
+        {
+           playerBrain.onRedTeam = false;
+        } else
+        {
+            playerBrain.onRedTeam = true;
+        }
     }
 
     private void OnDisable() {
@@ -34,10 +46,16 @@ public class PlayerOnDeath : NetworkBehaviour
         {
             Debug.Log("Player has died");
 
+            bool onRedTeam = playerBrain.onRedTeam;
+
             player.GetComponent<CharacterController>().enabled = false;
-            //player.transform.position = respawnManager.getRandomRespawnPoint();
-            player.transform.position = respawnManager.getClosestRespawnPoint(player.transform.position);
+            Vector3 newPos = teamManager.getClosestRespawnPoint(player.transform.position, onRedTeam);
             player.GetComponent<CharacterController>().enabled = true;
+
+            newPos.y += 1.0f;
+            player.transform.position = newPos;
+
+            playerBrain.hideHat();
 
             player.GetComponent<MovePlayer>().hasDied();
             player.GetComponent<Alive>().heal(player.GetComponent<Alive>().getMaxHealth());

@@ -219,6 +219,8 @@ public class MovePlayer : NetworkBehaviour
     {
         currentRespawnTimer = -1.0f;
         body.GetComponent<MeshRenderer>().enabled = true;
+
+        gameObject.GetComponent<PlayerBrain>().showHat();
     }
 
 }
