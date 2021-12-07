@@ -776,6 +776,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bb4d7d7487a6f5f4382d1f0edb71e6e6, type: 3}
+--- !u!114 &1303300701 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8361073835460269071, guid: 49cb04b962c39a849bc760b69c9767e7,
+    type: 3}
+  m_PrefabInstance: {fileID: 5459813405123189356}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0fdf1ee451a45d4da9e8066817d8b3f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1375549267
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1091,6 +1103,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1376693093097710731, guid: 66b1ed2236e65044eb96d5c1ecab145c,
+        type: 3}
+      propertyPath: sceneId
+      value: 848274375
+      objectReference: {fileID: 0}
+    - target: {fileID: 2831660978733071632, guid: 66b1ed2236e65044eb96d5c1ecab145c,
+        type: 3}
+      propertyPath: teamManager
+      value: 
+      objectReference: {fileID: 1303300701}
     - target: {fileID: 7243191072153502602, guid: 66b1ed2236e65044eb96d5c1ecab145c,
         type: 3}
       propertyPath: sceneId
@@ -1318,11 +1340,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1376693093097710731, guid: 66b1ed2236e65044eb96d5c1ecab145c,
+        type: 3}
+      propertyPath: sceneId
+      value: 836454548
+      objectReference: {fileID: 0}
     - target: {fileID: 2831660978733071632, guid: 66b1ed2236e65044eb96d5c1ecab145c,
         type: 3}
       propertyPath: isRed
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2831660978733071632, guid: 66b1ed2236e65044eb96d5c1ecab145c,
+        type: 3}
+      propertyPath: teamManager
+      value: 
+      objectReference: {fileID: 1303300701}
     - target: {fileID: 7243191072153502602, guid: 66b1ed2236e65044eb96d5c1ecab145c,
         type: 3}
       propertyPath: sceneId

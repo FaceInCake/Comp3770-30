@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 
-public class CaptureFlagBrain : NetworkBehaviour
+public class CaptureFlagBrain : MonoBehaviour
 {
     public bool isRed;
     GameObject redChild;
@@ -11,7 +11,7 @@ public class CaptureFlagBrain : NetworkBehaviour
 
     GameObject flagBase;
 
-    TeamManager teamManager;
+    public TeamManager teamManager;
 
     public bool isPickedUp = false;
 
@@ -19,8 +19,6 @@ public class CaptureFlagBrain : NetworkBehaviour
     {
         redChild = gameObject.transform.Find("RedFlag").gameObject;
         blueChild = gameObject.transform.Find("BlueFlag").gameObject;
-
-        teamManager = GameObject.Find("TeamManager").GetComponent<TeamManager>();
 
         if (isRed)
             flagBase = GameObject.Find("RedTeamFlagBase");
@@ -72,7 +70,7 @@ public class CaptureFlagBrain : NetworkBehaviour
         if ((playerIsRed && isRed) || (!playerIsRed && !isRed))
         {
             // player and flag are both on the same team, so return the flag to its base
-            gameObject.transform.position = flagBase.transform.position;
+            flagBase.GetComponent<FlagBaseBrain>().returnFlagToBase();
             isPickedUp = false;
             return;
         }

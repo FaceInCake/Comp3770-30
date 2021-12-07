@@ -37,6 +37,7 @@ public class TeamManager : NetworkBehaviour
         }
 
         players.Add(player);
+        teleportPlayerToClosestSpawnPoint(player);
     }
 
     public void addRespawnPoint(Transform point, bool isRed)

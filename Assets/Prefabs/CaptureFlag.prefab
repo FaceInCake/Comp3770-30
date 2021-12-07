@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 1099901128467637095}
   - component: {fileID: 2831660978733071632}
   - component: {fileID: 8154992699009063352}
-  - component: {fileID: 7243191072153502602}
-  - component: {fileID: 6268938653812128896}
+  - component: {fileID: 1376693093097710731}
+  - component: {fileID: 4503943839080730534}
   m_Layer: 0
   m_Name: CaptureFlag
   m_TagString: Untagged
@@ -49,6 +49,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isRed: 0
+  teamManager: {fileID: 0}
   isPickedUp: 0
 --- !u!136 &8154992699009063352
 CapsuleCollider:
@@ -64,7 +65,7 @@ CapsuleCollider:
   m_Height: 4
   m_Direction: 1
   m_Center: {x: 0, y: 1.5, z: 0.4}
---- !u!114 &7243191072153502602
+--- !u!114 &1376693093097710731
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -81,7 +82,7 @@ MonoBehaviour:
   visible: 0
   m_AssetId: 66b1ed2236e65044eb96d5c1ecab145c
   hasSpawned: 0
---- !u!114 &6268938653812128896
+--- !u!114 &4503943839080730534
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -95,7 +96,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  clientAuthority: 1
+  clientAuthority: 0
   sendInterval: 0.05
   syncPosition: 1
   syncRotation: 1

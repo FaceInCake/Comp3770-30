@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Mirror;
 
-public class FlagBaseBrain : MonoBehaviour
+public class FlagBaseBrain : NetworkBehaviour
 {
 
     public bool isRed;
@@ -91,6 +92,7 @@ public class FlagBaseBrain : MonoBehaviour
         }
     }
 
+    [Command(requiresAuthority = false)]
     public void returnFlagToBase()
     {
         flag.transform.position = gameObject.transform.position;

@@ -34,9 +34,15 @@ public class PlayerBrain : NetworkBehaviour
 
         if (heldFlag != null)
         {
-            heldFlag.transform.position = gameObject.transform.position;
+            setFlagPos(heldFlag, gameObject.transform.position);
         }
 
+    }
+
+    [Command]
+    public void setFlagPos(GameObject flag, Vector3 pos)
+    {
+        flag.transform.position = pos;
     }
 
     public void hideHat()
