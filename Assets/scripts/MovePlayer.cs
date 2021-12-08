@@ -18,6 +18,8 @@ public class MovePlayer : NetworkBehaviour
     
     private bool isGrounded = true;
     public Vector3 velocity = Vector3.zero;
+
+    TeamManager teamManager;
     
     CharacterController controller;
     GameObject camera;
@@ -31,6 +33,8 @@ public class MovePlayer : NetworkBehaviour
         health = gameObject.GetComponent<Alive>();
         health.setMaxHealth(400);
         body = gameObject.transform.GetChild(0).gameObject;
+
+        teamManager = GameObject.Find("TeamManager").GetComponent<TeamManager>();
 
         if (!isLocalPlayer)
         {
@@ -230,6 +234,22 @@ public class MovePlayer : NetworkBehaviour
         body.GetComponent<MeshRenderer>().enabled = true;
 
         gameObject.GetComponent<PlayerBrain>().showHat();
+    }
+
+
+    public void teleportToClosestSpawnPoint()
+    {
+        if (!isLocalPlayer)
+            return;
+
+        gameObject.GetComponent<CharacterController>().enabled = false;
+
+        GameObject spawnPoint = teamManager.getClosestRespawnPoint(gameObject.transform.position, gameObject.GetComponent<PlayerBrain>().isOnRedTeam());
+        Vector3 newPos = spawnPoint.transform.position;
+        newPos.y += 1.0f;
+        gameObject.transform.position = newPos;
+
+        gameObject.GetComponent<CharacterController>().enabled = true;
     }
 
 }

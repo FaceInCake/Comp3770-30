@@ -6,24 +6,49 @@ using Mirror;
 public class PlayerBrain : NetworkBehaviour
 {
 
-    public bool onRedTeam;
+    bool onRedTeam;
 
     GameObject redHat;
     GameObject blueHat;
 
+    [SyncVar]
+    GameObject heldFlag = null;
 
-    public GameObject heldFlag = null;
+    GameObject redFlag;
+    GameObject blueFlag;
+    GameObject redFlagBase;
+    GameObject blueFlagBase;
+
+    GameObject teamManager;
+
+    static int playersJoined = 0;
 
     void Start()
     { 
-        GameObject teams = GameObject.Find("TeamManager");
-        teams.GetComponent<TeamManager>().addPlayer(gameObject);
+        teamManager = GameObject.Find("TeamManager");
+
+        redFlag = GameObject.Find("RedTeamCaptureFlag");
+        blueFlag = GameObject.Find("BlueTeamCaptureFlag");
+        redFlagBase = GameObject.Find("RedTeamFlagBase");
+        blueFlagBase = GameObject.Find("BlueTeamFlagBase");
+
+        //if (teamManager.GetComponent<TeamManager>().getRedPlayersCount() > teamManager.GetComponent<TeamManager>().getBluePlayersCount())
+        if (playersJoined % 2 == 0)
+        {
+            setToTeam(false);
+        }
+        else
+        {
+            setToTeam(true);
+        }
+
+        addPlayer(gameObject);
 
         redHat = gameObject.transform.Find("RedHat").gameObject;
         blueHat = gameObject.transform.Find("BlueHat").gameObject;
 
         showHat();
-
+        playersJoined++;
     }
 
     void Update()
@@ -37,6 +62,17 @@ public class PlayerBrain : NetworkBehaviour
             setFlagPos(heldFlag, gameObject.transform.position);
         }
 
+    }
+
+    [Command]
+    void setToTeam(bool redTeam)
+    {
+        onRedTeam = redFlag;
+    }
+
+    public bool isOnRedTeam()
+    {
+        return onRedTeam;
     }
 
     [Command]
@@ -75,11 +111,150 @@ public class PlayerBrain : NetworkBehaviour
         }
     }
 
+    [Command]
+    void setHeldFlag(GameObject flag)
+    {
+        heldFlag = flag;
+    }
+
     public GameObject getHeldFlag()
     {
         return heldFlag;
     }
 
 
+    [Command]
+    public void dropFlag()
+    {
+        if (heldFlag == null)
+            return;
+
+        heldFlag = null;
+    }
+
+
+    public void handleCollisionWithFlag(GameObject flag)
+    {
+        // if the flag is held, then ignore all collisions
+        List<GameObject> players = teamManager.GetComponent<TeamManager>().getPlayers();
+        foreach (GameObject p in players)
+        {
+            if (p.GetComponent<PlayerBrain>().getHeldFlag() == flag)
+            {
+                return;
+            }
+        }
+
+
+        bool isRed = flag.GetComponent<CaptureFlagBrain>().isRed;
+
+        if ((onRedTeam && isRed) || (!onRedTeam && !isRed))
+        {
+            // player and flag are both on the same team, so return the flag to its base
+            returnFlagToBase(heldFlag);
+            return;
+        }
+
+        if ((onRedTeam && !isRed) || (!onRedTeam && isRed))
+        {
+            // enemy has collided with this flag, stick onto them
+            setHeldFlag(flag);
+            return;
+        }
+    }
+
+    [Command]
+    void returnFlagToBase(GameObject flag)
+    {
+
+        Vector3 pos;
+
+        if (flag.GetComponent<CaptureFlagBrain>().isRed)
+        {
+            pos = redFlagBase.transform.position;
+        }
+        else
+        {
+            pos = blueFlagBase.transform.position;
+        }
+
+        setFlagPos(flag, pos);
+
+        // if any players are holding the flag then they need to drop it
+        List<GameObject> players = teamManager.GetComponent<TeamManager>().getPlayers();
+        foreach (GameObject p in players)
+        {
+            if (p.GetComponent<PlayerBrain>().getHeldFlag() == flag)
+            {
+                p.GetComponent<PlayerBrain>().dropFlag();
+            }
+        }
+
+        //flag.transform.position = flag.GetComponent<CaptureFlagBrain>().flagBase.transform.position;
+
+    }
+
+
+    public void handleCollisionWithBase(GameObject baseObject)
+    {
+        bool isRed = baseObject.GetComponent<FlagBaseBrain>().isRed;
+
+        if ((onRedTeam && isRed) || (!onRedTeam && !isRed))
+        {
+            // ally returned to base, if they have the opponent's flag then they get a point and the game resets
+            // player can't hold their own flag, so if they have a flag then they get a capture point
+            if (getHeldFlag() != null)
+            {
+                if (isRed)
+                {
+                    teamManager.GetComponent<TeamManager>().addPointToRedTeam();
+                    dropFlag();
+                    resetMatch();
+                }
+                else
+                {
+                    teamManager.GetComponent<TeamManager>().addPointToBlueTeam();
+                    dropFlag();
+                    resetMatch();
+                }
+            }
+        }
+    }
+
+
+    // called after one of the teams gets a point
+    [Command]
+    public void resetMatch()
+    {
+
+        returnFlagToBase(redFlag);
+        returnFlagToBase(blueFlag);
+
+        List<GameObject> players = teamManager.GetComponent<TeamManager>().getPlayers();
+
+        for (int i = 0; i < players.Count; i++)
+        {
+            players[i].GetComponent<MovePlayer>().teleportToClosestSpawnPoint();
+        }
+
+        //if (redTeamPoints >= 10 || blueTeamPoints >= 10)
+        //{
+            //gameOver();
+            //return;
+        //}
+    }
+
+
+    [Command]
+    public void addPlayer(GameObject player)
+    {
+        if (teamManager.GetComponent<TeamManager>().players.Contains(player))
+        {
+            return;
+        }
+
+        teamManager.GetComponent<TeamManager>().players.Add(player);
+        player.GetComponent<MovePlayer>().teleportToClosestSpawnPoint();
+    }
 
 }

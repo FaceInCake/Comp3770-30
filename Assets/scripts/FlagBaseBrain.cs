@@ -44,13 +44,6 @@ public class FlagBaseBrain : NetworkBehaviour
     void OnTriggerEnter(Collider c)
     {
 
-        // ignore all incoming collisions if the flag is held by a player
-        if (flag.GetComponent<CaptureFlagBrain>().isPickedUp)
-        {
-            return;
-        }
-
-
         GameObject possiblePlayer = c.gameObject;
         List<GameObject> players = teamManager.getPlayers();
 
@@ -58,44 +51,12 @@ public class FlagBaseBrain : NetworkBehaviour
         {
             if (players[i] == possiblePlayer)
             {
-                handlePlayerCollision(possiblePlayer);
+                possiblePlayer.GetComponent<PlayerBrain>().handleCollisionWithBase(gameObject);
                 return;
             }
         }
 
 
-    }
-
-    void handlePlayerCollision(GameObject player)
-    {
-        bool playerIsRed = player.GetComponent<PlayerBrain>().onRedTeam;
-
-        if ((playerIsRed && isRed) || (!playerIsRed && !isRed))
-        {
-            // ally returned to base, if they have the opponent's flag then they get a point and the game resets
-
-            if (player.GetComponent<PlayerBrain>().getHeldFlag() != null)
-            {
-                if (isRed)
-                {
-                    teamManager.addPointToRedTeam();
-                    player.GetComponent<PlayerBrain>().getHeldFlag().GetComponent<CaptureFlagBrain>().dropFlag(player);
-                    teamManager.GetComponent<TeamManager>().resetMatch();
-                }
-                else
-                {
-                    teamManager.addPointToBlueTeam();
-                    player.GetComponent<PlayerBrain>().getHeldFlag().GetComponent<CaptureFlagBrain>().dropFlag(player);
-                    teamManager.GetComponent<TeamManager>().resetMatch();
-                }
-            }
-        }
-    }
-
-    [Command(requiresAuthority = false)]
-    public void returnFlagToBase()
-    {
-        flag.transform.position = gameObject.transform.position;
     }
 
 }

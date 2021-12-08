@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2831660978733071632}
   - component: {fileID: 8154992699009063352}
   - component: {fileID: 1376693093097710731}
-  - component: {fileID: 4503943839080730534}
+  - component: {fileID: 1572627111503151790}
   m_Layer: 0
   m_Name: CaptureFlag
   m_TagString: Untagged
@@ -48,9 +48,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f3dd34967f4ac749b3fb1f1db9379b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
   isRed: 0
+  flagBase: {fileID: 0}
   teamManager: {fileID: 0}
-  isPickedUp: 0
 --- !u!136 &8154992699009063352
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -82,7 +84,7 @@ MonoBehaviour:
   visible: 0
   m_AssetId: 66b1ed2236e65044eb96d5c1ecab145c
   hasSpawned: 0
---- !u!114 &4503943839080730534
+--- !u!114 &1572627111503151790
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

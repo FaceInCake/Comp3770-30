@@ -6,7 +6,7 @@ using Mirror;
 public class TeamManager : NetworkBehaviour
 {
 
-    List<GameObject> players;
+    public SyncList<GameObject> players = new SyncList<GameObject>();
 
     [SyncVar]
     int blueTeamPoints = 0;
@@ -16,59 +16,65 @@ public class TeamManager : NetworkBehaviour
     List<Transform> redRespawnPoints;
     List<Transform> blueRespawnPoints;
 
+    public Transform redSpawners;
+    public Transform blueSpawners;
+
     public GameObject redTeamFlag;
     public GameObject blueTeamFlag;
     public GameObject redTeamBase;
     public GameObject blueTeamBase;
 
+    [SyncVar]
+    bool friendlyFireEnabled = false;
 
-    public bool friendlyFireEnabled = false;
 
-    public void Start()
+    public void Awake()
     {
-        players = new List<GameObject>();
-    }
+        redRespawnPoints = new List<Transform>();
+        blueRespawnPoints = new List<Transform>();
 
-    public void addPlayer(GameObject player)
-    {
-        if (players.Contains(player))
-        {
-            return;
+        for (int i = 0; i < redSpawners.childCount; i++)
+        { 
+            redRespawnPoints.Add(redSpawners.GetChild(i));
         }
 
-        players.Add(player);
-        teleportPlayerToClosestSpawnPoint(player);
+        for (int i = 0; i < blueSpawners.childCount; i++)
+        {
+            blueRespawnPoints.Add(blueSpawners.GetChild(i));
+        }
     }
 
-    public void addRespawnPoint(Transform point, bool isRed)
+
+    [Server]
+    public void setFriendlyFireEnabled(bool enabled)
     {
-        if (redRespawnPoints == null)
-        {
-            redRespawnPoints = new List<Transform>();
-        }
-
-        if (blueRespawnPoints == null)
-        {
-            blueRespawnPoints = new List<Transform>();
-        }
-
-
-        if (isRed)
-            redRespawnPoints.Add(point);
-        else
-            blueRespawnPoints.Add(point);
+        friendlyFireEnabled = enabled;
     }
+
+    public bool getFriendlyFireEnabled()
+    {
+        return friendlyFireEnabled;
+    }
+
 
     public List<GameObject> getPlayers()
     {
-        return players;
+        List<GameObject> p = new List<GameObject>();
+        for (int i = 0; i < players.Count; i++)
+        {
+            p.Add(players[i]);
+        }
+
+        return p;
     }
 
+    [Server]
     public void addPointToRedTeam()
     {
         redTeamPoints++;
     }
 
+    [Server]
     public void addPointToBlueTeam()
     {
         blueTeamPoints++;
@@ -84,11 +90,13 @@ public class TeamManager : NetworkBehaviour
         return blueTeamPoints;
     }
 
+    [Server]
     public void setRedTeamPoints(int p)
     {
         redTeamPoints = p;
     }
 
+    [Server]
     public void setBlueTeamPoints(int p)
     {
         blueTeamPoints = p;
@@ -127,12 +135,9 @@ public class TeamManager : NetworkBehaviour
 
             if (closestIndex == -1 || (closestDx * closestDx + closestDy * closestDy > dx * dx + dy * dy))
             {
-                if (!respawnPoints[i].gameObject.GetComponent<SpawnPointBrain>().isOccupied())
-                {
-                    closestDx = dx;
-                    closestDy = dy;
-                    closestIndex = i;
-                }
+                closestDx = dx;
+                closestDy = dy;
+                closestIndex = i;
             }
         }
 
@@ -147,7 +152,7 @@ public class TeamManager : NetworkBehaviour
         }
 
         return respawnPoints[closestIndex].gameObject;
-        
+
     }
 
     public int getRedPlayersCount()
@@ -155,7 +160,7 @@ public class TeamManager : NetworkBehaviour
         int count = 0;
         for (int i = 0; i < players.Count; i++)
         {
-            if (players[i].GetComponent<PlayerBrain>().onRedTeam)
+            if (players[i].GetComponent<PlayerBrain>().isOnRedTeam())
             {
                 count++;
             }
@@ -168,52 +173,12 @@ public class TeamManager : NetworkBehaviour
         int count = 0;
         for (int i = 0; i < players.Count; i++)
         {
-            if (!players[i].GetComponent<PlayerBrain>().onRedTeam)
+            if (!players[i].GetComponent<PlayerBrain>().isOnRedTeam())
             {
                 count++;
             }
         }
         return count;
-    }
-
-    // called after one of the teams gets a point
-    public void resetMatch()
-    {
-
-        redTeamBase.GetComponent<FlagBaseBrain>().returnFlagToBase();
-        blueTeamBase.GetComponent<FlagBaseBrain>().returnFlagToBase();
-
-        for (int i = 0; i < players.Count; i++)
-        {
-            teleportPlayerToClosestSpawnPoint(players[i]);
-        }
-
-        if (redTeamPoints >= 10 || blueTeamPoints >= 10)
-        {
-            gameOver();
-            return;
-        }
-    }
-
-    // called after one of the teams has ten points
-    public void gameOver()
-    {
-
-    }
-
-
-    public void teleportPlayerToClosestSpawnPoint(GameObject player)
-    {
-        player.GetComponent<CharacterController>().enabled = false;
-        GameObject spawnPoint = getClosestRespawnPoint(player.transform.position, player.GetComponent<PlayerBrain>().onRedTeam);
-
-        spawnPoint.GetComponent<SpawnPointBrain>().setOccupiedForTime(5.0f);
-
-        Vector3 newPos = spawnPoint.transform.position;
-        newPos.y += 1.0f;
-        player.transform.position = newPos;
-
-        player.GetComponent<CharacterController>().enabled = true;
     }
 
 }

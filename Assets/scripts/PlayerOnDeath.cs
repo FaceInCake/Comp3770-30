@@ -21,14 +21,6 @@ public class PlayerOnDeath : NetworkBehaviour
 
         playerBrain = player.GetComponent<PlayerBrain>();
 
-
-        if (teamManager.getRedPlayersCount() > teamManager.getBluePlayersCount())
-        {
-           playerBrain.onRedTeam = false;
-        } else
-        {
-            playerBrain.onRedTeam = true;
-        }
     }
 
     private void OnDisable() {
@@ -46,16 +38,11 @@ public class PlayerOnDeath : NetworkBehaviour
         {
             Debug.Log("Player has died");
 
-            bool onRedTeam = playerBrain.onRedTeam;
+            bool onRedTeam = playerBrain.isOnRedTeam();
 
-            GameObject possibleFlag = playerBrain.getHeldFlag();
-            if (possibleFlag != null)
-            {
-                possibleFlag.GetComponent<CaptureFlagBrain>().dropFlag(gameObject);
-            }
+            playerBrain.dropFlag();
 
-            
-            teamManager.teleportPlayerToClosestSpawnPoint(gameObject);
+            gameObject.GetComponent<MovePlayer>().teleportToClosestSpawnPoint();
 
             playerBrain.hideHat();
 
