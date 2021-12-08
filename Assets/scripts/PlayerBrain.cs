@@ -11,7 +11,7 @@ public class PlayerBrain : NetworkBehaviour
     GameObject redHat;
     GameObject blueHat;
 
-    [SyncVar]
+
     GameObject heldFlag = null;
 
     GameObject redFlag;
@@ -20,8 +20,6 @@ public class PlayerBrain : NetworkBehaviour
     GameObject blueFlagBase;
 
     GameObject teamManager;
-
-    static int playersJoined = 0;
 
     void Start()
     { 
@@ -32,23 +30,32 @@ public class PlayerBrain : NetworkBehaviour
         redFlagBase = GameObject.Find("RedTeamFlagBase");
         blueFlagBase = GameObject.Find("BlueTeamFlagBase");
 
-        //if (teamManager.GetComponent<TeamManager>().getRedPlayersCount() > teamManager.GetComponent<TeamManager>().getBluePlayersCount())
-        if (playersJoined % 2 == 0)
+
+        Debug.Log("Red players count: " + teamManager.GetComponent<TeamManager>().getRedPlayersCount());
+        Debug.Log("Blue players count: " + teamManager.GetComponent<TeamManager>().getBluePlayersCount());
+
+        if (teamManager.GetComponent<TeamManager>().getRedPlayersCount() < teamManager.GetComponent<TeamManager>().getBluePlayersCount())
         {
+            onRedTeam = false;
             setToTeam(false);
         }
         else
         {
+            onRedTeam = true;
             setToTeam(true);
         }
 
-        addPlayer(gameObject);
 
         redHat = gameObject.transform.Find("RedHat").gameObject;
         blueHat = gameObject.transform.Find("BlueHat").gameObject;
 
         showHat();
-        playersJoined++;
+
+        addPlayer(gameObject);
+
+        Debug.Log("Red players count: " + teamManager.GetComponent<TeamManager>().getRedPlayersCount()); 
+        Debug.Log("Blue players count: " + teamManager.GetComponent<TeamManager>().getBluePlayersCount());
+
     }
 
     void Update()
@@ -64,10 +71,9 @@ public class PlayerBrain : NetworkBehaviour
 
     }
 
-    [Command]
     void setToTeam(bool redTeam)
     {
-        onRedTeam = redFlag;
+        onRedTeam = redTeam;
     }
 
     public bool isOnRedTeam()
@@ -248,12 +254,18 @@ public class PlayerBrain : NetworkBehaviour
     [Command]
     public void addPlayer(GameObject player)
     {
-        if (teamManager.GetComponent<TeamManager>().players.Contains(player))
+        if (teamManager.GetComponent<TeamManager>().player1 == null)
         {
+            teamManager.GetComponent<TeamManager>().player1 = player;
             return;
         }
 
-        teamManager.GetComponent<TeamManager>().players.Add(player);
+        if (teamManager.GetComponent<TeamManager>().player2 == null)
+        {
+            teamManager.GetComponent<TeamManager>().player2 = player;
+            return;
+        }
+
         player.GetComponent<MovePlayer>().teleportToClosestSpawnPoint();
     }
 

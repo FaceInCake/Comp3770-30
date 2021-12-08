@@ -6,7 +6,13 @@ using Mirror;
 public class TeamManager : NetworkBehaviour
 {
 
-    public SyncList<GameObject> players = new SyncList<GameObject>();
+    //public SyncList<GameObject> players = new SyncList<GameObject>();
+
+    [SyncVar]
+    public GameObject player1;
+
+    [SyncVar]
+    public GameObject player2;
 
     [SyncVar]
     int blueTeamPoints = 0;
@@ -60,10 +66,10 @@ public class TeamManager : NetworkBehaviour
     public List<GameObject> getPlayers()
     {
         List<GameObject> p = new List<GameObject>();
-        for (int i = 0; i < players.Count; i++)
-        {
-            p.Add(players[i]);
-        }
+        if (player1 != null) p.Add(player1);
+        if (player2 != null) p.Add(player2);
+
+        Debug.Log("Players count: "+ p.Count);
 
         return p;
     }
@@ -158,26 +164,34 @@ public class TeamManager : NetworkBehaviour
     public int getRedPlayersCount()
     {
         int count = 0;
-        for (int i = 0; i < players.Count; i++)
+
+        if (player1 != null)
         {
-            if (players[i].GetComponent<PlayerBrain>().isOnRedTeam())
-            {
-                count++;
-            }
+            if (player1.GetComponent<PlayerBrain>().isOnRedTeam()) count++;
         }
+
+        if (player2 != null)
+        {
+            if (player2.GetComponent<PlayerBrain>().isOnRedTeam()) count++;
+        }
+
         return count;
     }
 
     public int getBluePlayersCount()
     {
         int count = 0;
-        for (int i = 0; i < players.Count; i++)
+
+        if (player1 != null)
         {
-            if (!players[i].GetComponent<PlayerBrain>().isOnRedTeam())
-            {
-                count++;
-            }
+            if (!player1.GetComponent<PlayerBrain>().isOnRedTeam()) count++;
         }
+
+        if (player2 != null)
+        {
+            if (!player2.GetComponent<PlayerBrain>().isOnRedTeam()) count++;
+        }
+
         return count;
     }
 
