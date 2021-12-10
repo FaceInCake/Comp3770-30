@@ -5,51 +5,111 @@ using Mirror;
 
 public class CaptureFlagBrain : NetworkBehaviour
 {
-    public bool isRed;
-    GameObject redChild;
-    GameObject blueChild;
 
-    public GameObject flagBase;
+    public uint heldByPlayerWithID = 9999;
+    public bool isRed;
+
+    public GameObject redBody;
+    public GameObject blueBody;
 
     public TeamManager teamManager;
 
+    public GameObject redBase;
+    public GameObject blueBase;
+
     void Start()
     {
-        redChild = gameObject.transform.Find("RedFlag").gameObject;
-        blueChild = gameObject.transform.Find("BlueFlag").gameObject;
-
-
         if (isRed)
         {
-            for (int i = 0; i < redChild.transform.childCount; i++)
-                redChild.transform.GetChild(i).gameObject.GetComponent<Renderer>().enabled = true;
+            for (int i = 0; i < redBody.transform.childCount; i++)
+                redBody.transform.GetChild(i).gameObject.GetComponent<Renderer>().enabled = true;
 
-            for (int i = 0; i < blueChild.transform.childCount; i++)
-                blueChild.transform.GetChild(i).gameObject.GetComponent<Renderer>().enabled = false;
-        } else {
-            for (int i = 0; i < redChild.transform.childCount; i++)
-                redChild.transform.GetChild(i).gameObject.GetComponent<Renderer>().enabled = false;
+            for (int i = 0; i < blueBody.transform.childCount; i++)
+                blueBody.transform.GetChild(i).gameObject.GetComponent<Renderer>().enabled = false;
+        }
 
-            for (int i = 0; i < blueChild.transform.childCount; i++)
-                blueChild.transform.GetChild(i).gameObject.GetComponent<Renderer>().enabled = true;
+        else
+        {
+            for (int i = 0; i < redBody.transform.childCount; i++)
+                redBody.transform.GetChild(i).gameObject.GetComponent<Renderer>().enabled = false;
+
+            for (int i = 0; i < blueBody.transform.childCount; i++)
+                blueBody.transform.GetChild(i).gameObject.GetComponent<Renderer>().enabled = true;
         }
     }
 
-    public void OnTriggerEnter(Collider c)
+    [Server]
+    void OnTriggerEnter(Collider c)
     {
+        // if the flag is already held by someone, ignore all collisions
+        if (heldByPlayerWithID != 9999)
+            return;
 
-        GameObject possiblePlayer = c.gameObject;
-        List<GameObject> players = teamManager.getPlayers();
-
-        for (int i = 0; i < players.Count; i++)
+        if (c.gameObject.GetComponent<NetworkIdentity>() != null)
         {
-            if (players[i] == possiblePlayer)
+            uint id = c.gameObject.GetComponent<NetworkIdentity>().netId;
+            int index = getPlayerIndex(id);
+
+            // if an opponent hits the flag, grab it
+            if ((isRed && !teamManager.players[index].onRedTeam) || (!isRed && teamManager.players[index].onRedTeam))
             {
-                possiblePlayer.GetComponent<PlayerBrain>().handleCollisionWithFlag(gameObject);
-                return;
+                heldByPlayerWithID = id;
+                RpcSetFlagHeld(id, isRed);
+            }
+
+            // if teammate collides with the flag, send it back to base
+            if ((isRed && teamManager.players[index].onRedTeam) || (!isRed && !teamManager.players[index].onRedTeam))
+            {
+                Vector3 pos;
+                if (isRed)
+                    pos = redBase.transform.position;
+                else
+                    pos = blueBase.transform.position;
+
+                if (isRed)
+                    GameObject.Find("RedTeamCaptureFlag").gameObject.transform.position = pos;
+                else
+                    GameObject.Find("BlueTeamCaptureFlag").gameObject.transform.position = pos;
+
+                RpcSetFlagPos(isRed, pos);
+
+            }
+
+        }
+    }
+
+
+    [ClientRpc]
+    public void RpcSetFlagHeld(uint id, bool red)
+    {
+        if (red)
+            GameObject.Find("RedTeamCaptureFlag").gameObject.GetComponent<CaptureFlagBrain>().heldByPlayerWithID = id;
+        else
+            GameObject.Find("BlueTeamCaptureFlag").gameObject.GetComponent<CaptureFlagBrain>().heldByPlayerWithID = id;
+    }
+
+
+    [ClientRpc]
+    public void RpcSetFlagPos(bool red, Vector3 pos)
+    {
+        if (red)
+            GameObject.Find("RedTeamCaptureFlag").gameObject.transform.position = pos;
+        else
+            GameObject.Find("BlueTeamCaptureFlag").gameObject.transform.position = pos;
+    }
+
+
+    int getPlayerIndex(uint id)
+    {
+        for (int i = 0; i < teamManager.players.Length; i++)
+        {
+            if (teamManager.players[i].id == id)
+            {
+                return i;
             }
         }
-
+        return -1;
     }
+
 
 }

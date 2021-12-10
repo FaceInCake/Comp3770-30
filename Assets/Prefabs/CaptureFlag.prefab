@@ -50,9 +50,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
+  heldByPlayerWithID: 9999
   isRed: 0
-  flagBase: {fileID: 0}
-  teamManager: {fileID: 0}
+  redBody: {fileID: 6349050783559425923}
+  blueBody: {fileID: 7382477394969872767}
 --- !u!136 &8154992699009063352
 CapsuleCollider:
   m_ObjectHideFlags: 0
