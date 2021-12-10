@@ -1505,6 +1505,31 @@ PrefabInstance:
       propertyPath: flag
       value: 
       objectReference: {fileID: 322302942}
+    - target: {fileID: 2662132445656826813, guid: 3c9e83f688a577441bfc3ea5be3da372,
+        type: 3}
+      propertyPath: redFlag
+      value: 
+      objectReference: {fileID: 1657618236}
+    - target: {fileID: 2662132445656826813, guid: 3c9e83f688a577441bfc3ea5be3da372,
+        type: 3}
+      propertyPath: blueFlag
+      value: 
+      objectReference: {fileID: 322302942}
+    - target: {fileID: 2662132445656826813, guid: 3c9e83f688a577441bfc3ea5be3da372,
+        type: 3}
+      propertyPath: redFlagBase
+      value: 
+      objectReference: {fileID: 623260046}
+    - target: {fileID: 2662132445656826813, guid: 3c9e83f688a577441bfc3ea5be3da372,
+        type: 3}
+      propertyPath: teamManager
+      value: 
+      objectReference: {fileID: 55590088}
+    - target: {fileID: 2662132445656826813, guid: 3c9e83f688a577441bfc3ea5be3da372,
+        type: 3}
+      propertyPath: blueFlagBase
+      value: 
+      objectReference: {fileID: 856927192}
     - target: {fileID: 5247564723013920545, guid: 3c9e83f688a577441bfc3ea5be3da372,
         type: 3}
       propertyPath: m_RootOrder
@@ -1786,6 +1811,31 @@ PrefabInstance:
       propertyPath: isRed
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2662132445656826813, guid: 3c9e83f688a577441bfc3ea5be3da372,
+        type: 3}
+      propertyPath: redFlag
+      value: 
+      objectReference: {fileID: 1657618236}
+    - target: {fileID: 2662132445656826813, guid: 3c9e83f688a577441bfc3ea5be3da372,
+        type: 3}
+      propertyPath: blueFlag
+      value: 
+      objectReference: {fileID: 322302942}
+    - target: {fileID: 2662132445656826813, guid: 3c9e83f688a577441bfc3ea5be3da372,
+        type: 3}
+      propertyPath: redFlagBase
+      value: 
+      objectReference: {fileID: 623260046}
+    - target: {fileID: 2662132445656826813, guid: 3c9e83f688a577441bfc3ea5be3da372,
+        type: 3}
+      propertyPath: teamManager
+      value: 
+      objectReference: {fileID: 55590088}
+    - target: {fileID: 2662132445656826813, guid: 3c9e83f688a577441bfc3ea5be3da372,
+        type: 3}
+      propertyPath: blueFlagBase
+      value: 
+      objectReference: {fileID: 856927192}
     - target: {fileID: 5247564723013920545, guid: 3c9e83f688a577441bfc3ea5be3da372,
         type: 3}
       propertyPath: m_RootOrder

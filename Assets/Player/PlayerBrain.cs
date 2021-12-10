@@ -10,14 +10,19 @@ public class PlayerBrain : NetworkBehaviour
     GameObject blueHat;
     
     TeamManager teamManager;
-    
+
+    SpawnPointManager spawnPointManager;
+
     void Start()
     {
         redHat = gameObject.transform.Find("RedHat").gameObject;
         blueHat = gameObject.transform.Find("BlueHat").gameObject;
 
         teamManager = GameObject.Find("TeamManager").gameObject.GetComponent<TeamManager>();
-    
+        spawnPointManager = GameObject.Find("SpawnPointManager").gameObject.GetComponent<SpawnPointManager>();
+
+        FlagBaseBrain.OnFlagReturn += returnedFlag;
+
         showHat();
     }
     
@@ -98,5 +103,32 @@ public class PlayerBrain : NetworkBehaviour
     {
         showHat();
     }
-    
+
+
+    void returnedFlag(bool flagIsRed)
+    {
+        RpcRespawnAllPlayers();
+    }
+
+
+    [ClientRpc]
+    void RpcRespawnAllPlayers()
+    {
+        Debug.Log("Flag was deposited");
+        teleportToClosestSpawnPoint();
+    }
+
+
+    void teleportToClosestSpawnPoint()
+    {
+        bool onRedTeam = teamManager.players[getPlayerIndex(netId)].onRedTeam;
+
+        gameObject.GetComponent<CharacterController>().enabled = false;
+        Vector3 pos = spawnPointManager.getClosestSpawnPoint(onRedTeam, gameObject.transform.position);
+        pos.y += 1.0f;
+        gameObject.transform.position = pos;
+        gameObject.GetComponent<CharacterController>().enabled = true;
+    }
+
+
 }
