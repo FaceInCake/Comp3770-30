@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpawnPointBrain : MonoBehaviour
+public class PlayerInfo
 {
-    public bool isRed;
+    public uint id;
+    public bool onRedTeam;
 }
