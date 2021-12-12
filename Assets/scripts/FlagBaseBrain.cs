@@ -65,7 +65,7 @@ public class FlagBaseBrain : NetworkBehaviour
                     // red flag brought to the blue base
 
                     // -- add a point to the blue team
-
+                    addPointToTeam(false);
 
                     // -- drop both flags
                     redFlag.GetComponent<CaptureFlagBrain>().heldByPlayerWithID = 9999;
@@ -93,7 +93,7 @@ public class FlagBaseBrain : NetworkBehaviour
                     // blue flag brought to the red base
 
                     // -- add point to the red team
-
+                    addPointToTeam(true);
 
                     // -- drop both flags
                     redFlag.GetComponent<CaptureFlagBrain>().heldByPlayerWithID = 9999;
@@ -121,8 +121,29 @@ public class FlagBaseBrain : NetworkBehaviour
         }
     }
 
+    [Server]
+    void addPointToTeam(bool redTeam)
+    {
+        if (redTeam)
+            teamManager.redTeamPoints++;
+        else
+            teamManager.blueTeamPoints++;
 
-    
+        RpcSetTeamPoints(teamManager.redTeamPoints++, teamManager.blueTeamPoints++);
+
+    }
+
+
+    [ClientRpc]
+    void RpcSetTeamPoints(int redPoints, int bluePoints)
+    {
+        teamManager.redTeamPoints = redPoints;
+        teamManager.blueTeamPoints = bluePoints;
+
+        Debug.Log("Red team points: " + teamManager.redTeamPoints + "   Blue team points: " + teamManager.blueTeamPoints);
+    }
+
+
     public delegate void FlagReturned(bool flagIsRed);
     public static event FlagReturned OnFlagReturn;
 

@@ -7,6 +7,8 @@ public class TeamManager : NetworkBehaviour
 {
 
     public PlayerInfo[] players;
+    public int redTeamPoints = 0;
+    public int blueTeamPoints = 0;
 
     void Awake()
     {
