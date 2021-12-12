@@ -69,6 +69,10 @@ public class HealthPickupBrain : MonoBehaviour
             return;
         }
 
+        if (c.transform.parent == null)
+        {
+            return;
+        }
 
         if (c.transform.parent.gameObject.GetComponent<Alive>() != null && respawnTimer < -0.5f)
         {
