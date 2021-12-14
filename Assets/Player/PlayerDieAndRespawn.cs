@@ -26,6 +26,8 @@ public class PlayerDieAndRespawn : NetworkBehaviour
         teamManager = GameObject.Find("TeamManager").GetComponent<TeamManager>();
 
         spawnPointManager = GameObject.Find("SpawnPointManager").GetComponent<SpawnPointManager>();
+
+        teleportToRandomSpawnPoint();
     }
 
     private void OnDisable() {
@@ -66,6 +68,17 @@ public class PlayerDieAndRespawn : NetworkBehaviour
 
         gameObject.GetComponent<CharacterController>().enabled = false;
         Vector3 pos = spawnPointManager.getClosestSpawnPoint(onRedTeam, gameObject.transform.position);
+        pos.y += 1.0f;
+        gameObject.transform.position = pos;
+        gameObject.GetComponent<CharacterController>().enabled = true;
+    }
+
+    void teleportToRandomSpawnPoint()
+    {
+        bool onRedTeam = teamManager.players[getPlayerIndex(netId)].onRedTeam;
+
+        gameObject.GetComponent<CharacterController>().enabled = false;
+        Vector3 pos = spawnPointManager.getRandomSpawnPoint(onRedTeam);
         pos.y += 1.0f;
         gameObject.transform.position = pos;
         gameObject.GetComponent<CharacterController>().enabled = true;
