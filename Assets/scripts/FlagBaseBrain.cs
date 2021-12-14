@@ -129,7 +129,7 @@ public class FlagBaseBrain : NetworkBehaviour
         else
             teamManager.blueTeamPoints++;
 
-        RpcSetTeamPoints(teamManager.redTeamPoints++, teamManager.blueTeamPoints++);
+        RpcSetTeamPoints(teamManager.redTeamPoints, teamManager.blueTeamPoints);
 
     }
 

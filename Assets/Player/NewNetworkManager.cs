@@ -11,7 +11,8 @@ using Mirror;
 public class NewNetworkManager : NetworkManager
 {
     public TeamManager teamManager;
-    
+    public SpawnPointManager spawnManager;
+
     public override void OnServerConnect(NetworkConnection conn) {
         teamManager.resyncPlayersList();
     }
@@ -36,7 +37,8 @@ public class NewNetworkManager : NetworkManager
         }
     
         teamManager.resyncPlayersList();
-    
+        spawnManager.setToLevel(spawnManager.currentLevelIndex);
+
     }
     
     public override void OnServerDisconnect(NetworkConnection conn)

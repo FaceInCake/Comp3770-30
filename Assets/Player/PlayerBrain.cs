@@ -22,6 +22,7 @@ public class PlayerBrain : NetworkBehaviour
         spawnPointManager = GameObject.Find("SpawnPointManager").gameObject.GetComponent<SpawnPointManager>();
 
         FlagBaseBrain.OnFlagReturn += returnedFlag;
+        TeamManager.RespawnAllPlayers += respawnRequested;
 
         showHat();
     }
@@ -130,5 +131,10 @@ public class PlayerBrain : NetworkBehaviour
         gameObject.GetComponent<CharacterController>().enabled = true;
     }
 
+
+    void respawnRequested()
+    {
+        teleportToClosestSpawnPoint();
+    }
 
 }
