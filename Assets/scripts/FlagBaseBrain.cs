@@ -64,9 +64,6 @@ public class FlagBaseBrain : NetworkBehaviour
                 {
                     // red flag brought to the blue base
 
-                    // -- add a point to the blue team
-                    addPointToTeam(false);
-
                     // -- move players onto spawn points
                     flagReturnedCallback(true); // player is subscribed to this and will respawn itself
 
@@ -82,6 +79,9 @@ public class FlagBaseBrain : NetworkBehaviour
                     blueFlag.transform.position = blueFlagBase.transform.position;
                     RpcSetFlagPos(false, blueFlagBase.transform.position);
 
+                    // -- add a point to the blue team
+                    addPointToTeam(false);
+
                 }
             }
 
@@ -91,9 +91,6 @@ public class FlagBaseBrain : NetworkBehaviour
                 if (isRed)
                 {
                     // blue flag brought to the red base
-
-                    // -- add point to the red team
-                    addPointToTeam(true);
 
                     // -- move players onto spawn points
                     flagReturnedCallback(false); // player is subscribed to this and will respawn itself
@@ -109,6 +106,9 @@ public class FlagBaseBrain : NetworkBehaviour
                     RpcSetFlagPos(true, redFlagBase.transform.position);
                     blueFlag.transform.position = blueFlagBase.transform.position;
                     RpcSetFlagPos(false, blueFlagBase.transform.position);
+
+                    // -- add point to the red team
+                    addPointToTeam(true);
 
 
                 }

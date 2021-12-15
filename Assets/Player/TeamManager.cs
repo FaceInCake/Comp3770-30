@@ -41,15 +41,23 @@ public class TeamManager : NetworkBehaviour
             
             // --- Switch all the spawn points and move flag bases to the new level
             spawnManager.setToLevel(nextLevel);
+
             
             // --- Respawn all the players
+            StartCoroutine(waitToRespawn());
             respawnAllPlayers();
-            
+
             // -- Set team points back to 0
             redTeamPoints = 0;
             blueTeamPoints = 0;
             RpcSetTeamPoints(0, 0);
         }
+    }
+
+    IEnumerator waitToRespawn()
+    {
+        yield return new WaitForSecondsRealtime(0.5f);
+        respawnAllPlayers();
     }
 
     [ClientRpc]
@@ -69,6 +77,8 @@ public class TeamManager : NetworkBehaviour
             RespawnAllPlayers();
         }
     }
+
+
 
     [Server]
     public void resyncPlayersList()
