@@ -67,6 +67,9 @@ public class FlagBaseBrain : NetworkBehaviour
                     // -- add a point to the blue team
                     addPointToTeam(false);
 
+                    // -- move players onto spawn points
+                    flagReturnedCallback(true); // player is subscribed to this and will respawn itself
+
                     // -- drop both flags
                     redFlag.GetComponent<CaptureFlagBrain>().heldByPlayerWithID = 9999;
                     RpcSetFlagHeld(9999, true);
@@ -78,9 +81,6 @@ public class FlagBaseBrain : NetworkBehaviour
                     RpcSetFlagPos(true, redFlagBase.transform.position);
                     blueFlag.transform.position = blueFlagBase.transform.position;
                     RpcSetFlagPos(false, blueFlagBase.transform.position);
-
-                    // -- move players onto spawn points
-                    flagReturnedCallback(true); // player is subscribed to this and will respawn itself
 
                 }
             }
@@ -95,6 +95,9 @@ public class FlagBaseBrain : NetworkBehaviour
                     // -- add point to the red team
                     addPointToTeam(true);
 
+                    // -- move players onto spawn points
+                    flagReturnedCallback(false); // player is subscribed to this and will respawn itself
+
                     // -- drop both flags
                     redFlag.GetComponent<CaptureFlagBrain>().heldByPlayerWithID = 9999;
                     RpcSetFlagHeld(9999, true);
@@ -107,8 +110,6 @@ public class FlagBaseBrain : NetworkBehaviour
                     blueFlag.transform.position = blueFlagBase.transform.position;
                     RpcSetFlagPos(false, blueFlagBase.transform.position);
 
-                    // -- move players onto spawn points
-                    flagReturnedCallback(false); // player is subscribed to this and will respawn itself
 
                 }
                 else

@@ -4,21 +4,15 @@ using UnityEngine;
 
 public class SpeedPadTrigger : MonoBehaviour
 {
-    //public float speedBoost;
-    //public float boostTime;
-    //
-    //GameObject player;
-    //void Start()
-    //{
-    //    player = GameObject.Find("Player").transform.GetChild(0).gameObject;
-    //}
-    //
-    //void OnTriggerEnter(Collider c)
-    //{
-    //    if (c.tag == "Player")
-    //    {
-    //        player.GetComponent<MovePlayer>().applySpeedModifier(speedBoost, boostTime);
-    //    }
-    //}
+    public float speedBoost;
+    public float boostTime;
+    
+    void OnTriggerEnter(Collider c)
+    {
+        if (c.tag == "Player")
+        {
+            c.transform.gameObject.GetComponent<MovePlayer>().applySpeedModifier(speedBoost, boostTime);
+        }
+    }
 
 }
