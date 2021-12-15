@@ -46,11 +46,18 @@ public class PlayerDieAndRespawn : NetworkBehaviour
             bool onRedTeam = teamManager.players[getPlayerIndex(netId)].onRedTeam;
             Debug.Log("Player has died: onRedTeam = " + onRedTeam);
     
-            // if the player is holding a flag
+            // if the player is holding the red flag
             if (redFlag.GetComponent<CaptureFlagBrain>().heldByPlayerWithID == netId)
             {
-                // they will set the flag with the color of their team on the ground
-                grabFlagBrain.CmdSetFlagHeld(9999, onRedTeam);
+                // they will set the flag with on the ground
+                grabFlagBrain.CmdSetFlagHeld(9999, true);
+            }
+
+            // if the player is holding the blue flag
+            if (blueFlag.GetComponent<CaptureFlagBrain>().heldByPlayerWithID == netId)
+            {
+                // they will set the flag with on the ground
+                grabFlagBrain.CmdSetFlagHeld(9999, false);
             }
 
 

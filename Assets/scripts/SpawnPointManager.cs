@@ -1,17 +1,42 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Mirror;
 
-public class SpawnPointManager : MonoBehaviour
+public class SpawnPointManager : NetworkBehaviour
 {
-    public List<Transform> redSpawnPoints;
-    public List<Transform> blueSpawnPoints;
+    public int currentLevelIndex;
+    public GameObject[] levels;
 
-    public Transform redSpawnPointsParent;
-    public Transform blueSpawnPointsParent;
+    public GameObject redFlagBase;
+    public GameObject blueFlagBase;
+
+    public GameObject redFlag;
+    public GameObject blueFlag;
+
+    List<Transform> redSpawnPoints;
+    List<Transform> blueSpawnPoints;
 
     void Awake()
     {
+        currentLevelIndex = Random.Range(0, levels.Length);
+
+        redSpawnPoints = new List<Transform>();
+        blueSpawnPoints = new List<Transform>();
+        setToLevel(currentLevelIndex);
+    }
+
+    // is called by an rpc and server function
+    public void useLevelAssets(int index)
+    {
+
+        // --- Set the spawn point lists to use the spawn points in the selected arena
+        redSpawnPoints.Clear();
+        blueSpawnPoints.Clear();
+
+        Transform redSpawnPointsParent = levels[index].transform.Find("RedSpawnPoints");
+        Transform blueSpawnPointsParent = levels[index].transform.Find("BlueSpawnPoints");
+
         for (int i = 0; i < redSpawnPointsParent.childCount; i++)
         {
             redSpawnPoints.Add(redSpawnPointsParent.GetChild(i));
@@ -21,6 +46,32 @@ public class SpawnPointManager : MonoBehaviour
         {
             blueSpawnPoints.Add(blueSpawnPointsParent.GetChild(i));
         }
+
+        // Set the flags and bases to the correct location in the selected arena
+        redFlag.GetComponent<CaptureFlagBrain>().heldByPlayerWithID = 9999;
+        blueFlag.GetComponent<CaptureFlagBrain>().heldByPlayerWithID = 9999;
+
+        redFlag.transform.position = levels[index].transform.Find("RedBaseLocation").position;
+        blueFlag.transform.position = levels[index].transform.Find("BlueBaseLocation").position;
+
+        redFlagBase.transform.position = levels[index].transform.Find("RedBaseLocation").position;
+        blueFlagBase.transform.position = levels[index].transform.Find("BlueBaseLocation").position;
+
+    }
+
+    [Server]
+    public void setToLevel(int index)
+    {
+        currentLevelIndex = index;
+        useLevelAssets(index);
+        RpcSetToLevel(index);
+    }
+
+    [ClientRpc]
+    public void RpcSetToLevel(int index)
+    {
+        currentLevelIndex = index;
+        useLevelAssets(index);
     }
 
     public Vector3 getRandomSpawnPoint(bool redTeam)
