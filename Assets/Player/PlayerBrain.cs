@@ -135,7 +135,8 @@ public class PlayerBrain : NetworkBehaviour
 
     void respawnRequested()
     {
-        teleportToClosestSpawnPoint();
+        Debug.Log("Respawning at: " + spawnPointManager.currentLevelIndex);
+        RpcRespawnAllPlayers();
     }
 
     void takeDamageFromTurret(uint id, float damage)

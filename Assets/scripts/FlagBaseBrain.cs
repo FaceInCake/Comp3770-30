@@ -64,11 +64,9 @@ public class FlagBaseBrain : NetworkBehaviour
                 {
                     // red flag brought to the blue base
 
-                    // -- add a point to the blue team
-                    addPointToTeam(false);
-
                     // -- move players onto spawn points
-                    flagReturnedCallback(true); // player is subscribed to this and will respawn itself
+                    flagReturnedCallback(true);
+                    RpcDropFlagCallback(true); // player is subscribed to this and will respawn itself
 
                     // -- drop both flags
                     redFlag.GetComponent<CaptureFlagBrain>().heldByPlayerWithID = 9999;
@@ -81,6 +79,9 @@ public class FlagBaseBrain : NetworkBehaviour
                     RpcSetFlagPos(true, redFlagBase.transform.position);
                     blueFlag.transform.position = blueFlagBase.transform.position;
                     RpcSetFlagPos(false, blueFlagBase.transform.position);
+
+                    // -- add a point to the blue team
+                    addPointToTeam(false);
 
                 }
             }
@@ -92,11 +93,9 @@ public class FlagBaseBrain : NetworkBehaviour
                 {
                     // blue flag brought to the red base
 
-                    // -- add point to the red team
-                    addPointToTeam(true);
-
                     // -- move players onto spawn points
-                    flagReturnedCallback(false); // player is subscribed to this and will respawn itself
+                    flagReturnedCallback(false);
+                    RpcDropFlagCallback(false); // player is subscribed to this and will respawn itself
 
                     // -- drop both flags
                     redFlag.GetComponent<CaptureFlagBrain>().heldByPlayerWithID = 9999;
@@ -109,6 +108,9 @@ public class FlagBaseBrain : NetworkBehaviour
                     RpcSetFlagPos(true, redFlagBase.transform.position);
                     blueFlag.transform.position = blueFlagBase.transform.position;
                     RpcSetFlagPos(false, blueFlagBase.transform.position);
+
+                    // -- add point to the red team
+                    addPointToTeam(true);
 
 
                 }
@@ -144,6 +146,12 @@ public class FlagBaseBrain : NetworkBehaviour
         Debug.Log("Red team points: " + teamManager.redTeamPoints + "   Blue team points: " + teamManager.blueTeamPoints);
     }
 
+
+    [ClientRpc]
+    void RpcDropFlagCallback(bool flagIsRed)
+    {
+        flagReturnedCallback(flagIsRed);
+    }
 
     public delegate void FlagReturned(bool flagIsRed);
     public static event FlagReturned OnFlagReturn;

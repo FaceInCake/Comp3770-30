@@ -123,11 +123,7 @@ public class TurretBrain : NetworkBehaviour
                 if (getAngleBetween(playerPosition - transform.position, getDirectionVector(0)) <= minimumFiringAngle)
                 {
                     timeCounter = 0;
-                    // --- Deal damage to the targeted player
-                    turretFiredCallback(targetPlayerID, damage);
-
-                    setMussleFlashVisible(true);
-                    bang.Play(0);
+                    fireAtPlayer();
                 }
             }
 
@@ -250,6 +246,20 @@ public class TurretBrain : NetworkBehaviour
         {
             OnTurretFired(targetId, damage);
         }
+    }
+
+
+    void fireAtPlayer()
+    {
+        RpcDamagePlayer(targetPlayerID, damage);
+        setMussleFlashVisible(true);
+        bang.Play(0);
+    }
+
+    [ClientRpc]
+    void RpcDamagePlayer(uint id, float damage)
+    {
+        turretFiredCallback(id, damage);
     }
 
 
