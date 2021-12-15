@@ -20,16 +20,33 @@ public class TurretBrain : NetworkBehaviour
     uint targetPlayerID = 9999;
     Vector3 playerPosition;
 
-    GameObject turretBase;
-    GameObject turretHead;
     GameObject muzzleFlash;
+
+    Transform turretBase;
+    Transform turretHead;
+    Transform redBaseParent;
+    Transform redHeadParent;
+    Transform blueBaseParent;
+    Transform blueHeadParent;
+
     AudioSource bang;
 
     void Awake()
     {
-        turretBase = transform.GetChild(0).gameObject;
-        turretHead = transform.GetChild(1).gameObject;
-        muzzleFlash = turretHead.transform.GetChild(0).gameObject;
+
+        turretBase = gameObject.transform.Find("Base");
+        turretHead = gameObject.transform.Find("Head");
+
+        redBaseParent = gameObject.transform.Find("RedBase");
+        redHeadParent = gameObject.transform.Find("RedHead");
+
+        blueBaseParent = gameObject.transform.Find("BlueBase");
+        blueHeadParent = gameObject.transform.Find("BlueHead");
+
+        muzzleFlash = turretHead.Find("MuzzleFlash").gameObject;
+
+        localSetToTeam(onRedTeam, firesAtEachTeam);
+
         // Bang sound effect should be in the Head object
         bang = transform.GetChild(1).GetComponent<AudioSource>();
 
@@ -175,15 +192,22 @@ public class TurretBrain : NetworkBehaviour
 
         if (leftDist < rightDist && leftDist < noTurnDist)
         {
-            turretHead.transform.Rotate(0, -rotationSpeed * Time.deltaTime, 0, Space.World);
+            turretHead.Rotate(0, -rotationSpeed * Time.deltaTime, 0, Space.World);
         }
 
         if (rightDist < leftDist && rightDist < noTurnDist)
         {
-            turretHead.transform.Rotate(0, rotationSpeed * Time.deltaTime, 0, Space.World);
+            turretHead.Rotate(0, rotationSpeed * Time.deltaTime, 0, Space.World);
         }
 
-        syncRotation(turretHead.transform.eulerAngles.y);
+        redHeadParent.transform.eulerAngles = new Vector3(
+            0, turretHead.eulerAngles.y, 0
+        );
+        blueHeadParent.transform.eulerAngles = new Vector3(
+            0, turretHead.eulerAngles.y, 0
+        );
+
+        syncRotation(turretHead.eulerAngles.y);
 
     }
 
@@ -206,6 +230,14 @@ public class TurretBrain : NetworkBehaviour
         turretHead.transform.eulerAngles = new Vector3(
             0, rotation, 0
         );
+
+        redHeadParent.transform.eulerAngles = new Vector3(
+            0, rotation, 0
+        );
+
+        blueHeadParent.transform.eulerAngles = new Vector3(
+            0, rotation, 0
+        );
     }
 
 
@@ -224,6 +256,69 @@ public class TurretBrain : NetworkBehaviour
     float getAngleBetween(Vector3 turretDir, Vector3 toPlayer)
     {
         return Mathf.Acos(Vector3.Dot(turretDir, toPlayer) / (Mathf.Abs(turretDir.magnitude * toPlayer.magnitude)));
+    }
+
+    [Server]
+    public void setToTeam(bool onRedTeam, bool isNeutral)
+    {
+        localSetToTeam(onRedTeam, isNeutral);
+        RpcSetToTeam(onRedTeam, isNeutral);
+    }
+
+    [ClientRpc]
+    void RpcSetToTeam(bool onRedTeam, bool isNeutral)
+    {
+        localSetToTeam(onRedTeam, isNeutral);
+    }
+
+    void localSetToTeam(bool onRedTeam, bool isNeutral)
+    {
+        firesAtEachTeam = isNeutral;
+        this.onRedTeam = onRedTeam;
+
+        // --- show the correct parts for the team
+        setChildrenVisible(turretBase, false);
+        setChildrenVisible(turretHead, false);
+
+        setChildrenVisible(redBaseParent, false);
+        setChildrenVisible(redHeadParent, false);
+
+        setChildrenVisible(blueBaseParent, false);
+        setChildrenVisible(blueHeadParent, false);
+
+        if (firesAtEachTeam)
+        {
+            setChildrenVisible(turretBase, true);
+            setChildrenVisible(turretHead, true);
+            return;
+        }
+
+        if (onRedTeam)
+        {
+            setChildrenVisible(redBaseParent, true);
+            setChildrenVisible(redHeadParent, true);
+        }
+        else
+        {
+            setChildrenVisible(blueBaseParent, true);
+            setChildrenVisible(blueHeadParent, true);
+        }
+    }
+
+    void setChildrenVisible(Transform transform, bool isVisible)
+    {
+
+        foreach (Transform child in transform)
+        {
+            if (child.childCount > 0)
+            {
+                setChildrenVisible(child, isVisible);
+            }
+            else
+            {
+                child.gameObject.GetComponent<MeshRenderer>().enabled = isVisible;
+            }
+        }
     }
 
 
