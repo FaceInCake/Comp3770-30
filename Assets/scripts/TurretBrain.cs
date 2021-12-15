@@ -1,24 +1,31 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Mirror;
 
-public class TurretBrain : MonoBehaviour
+public class TurretBrain : NetworkBehaviour
 {
 
     public float range;
     public float bulletsPerSecond;
     public float damage;
     public float rotationSpeed;
+    public float minimumFiringAngle;
 
-    GameObject player;
-    private Alive pAlive;
+    public bool firesAtEachTeam;
+    public bool onRedTeam;
+
+    TeamManager teamManager;
+
+    uint targetPlayerID = 9999;
+    Vector3 playerPosition;
 
     GameObject turretBase;
     GameObject turretHead;
     GameObject muzzleFlash;
     AudioSource bang;
 
-    void Start()
+    void Awake()
     {
         turretBase = transform.GetChild(0).gameObject;
         turretHead = transform.GetChild(1).gameObject;
@@ -26,8 +33,9 @@ public class TurretBrain : MonoBehaviour
         // Bang sound effect should be in the Head object
         bang = transform.GetChild(1).GetComponent<AudioSource>();
 
-        player = GameObject.Find("Player").transform.GetChild(0).gameObject;
-        pAlive = GameObject.Find("Player").GetComponent<Alive>();
+        playerPosition = new Vector3(0, 0, 0);
+
+        teamManager = GameObject.Find("TeamManager").gameObject.GetComponent<TeamManager>();
 
         foreach (Transform t in muzzleFlash.transform)
         {
@@ -39,32 +47,71 @@ public class TurretBrain : MonoBehaviour
 
     float timeCounter = 0;
     int muzzleFlashIsShowingFrames = -1;
+    [ServerCallback]
     void Update()
     {
-        if (!player)
+        if (targetPlayerID == 9999)
         {
-            return;
+            // -- Check if there are any enemies within range and target the closest one
+            int closestIndex = -1;
+            float closestDist = 0.0f;
+            for (int i = 0; i < teamManager.players.Length; i++)
+            {
+                float dist = (teamManager.players[i].position - gameObject.transform.position).magnitude;
+                if ((closestIndex == -1) || (dist < closestDist))
+                {
+                    if ((teamManager.players[i].onRedTeam != onRedTeam) || (firesAtEachTeam))
+                    {
+                        closestIndex = i;
+                        closestDist = dist;
+                    }
+                }
+            }
+
+            if (closestIndex == -1)
+            {
+                targetPlayerID = 9999;
+                return;
+            }
+
+            targetPlayerID = teamManager.players[closestIndex].id;
         }
+        else
+        {
+            // -- If the player is not in range, stop targeting them
+            if (Vector3.Distance(playerPosition, gameObject.transform.position) > range)
+            {
+                targetPlayerID = 9999;
+            }
+        }
+
+
+        // --- Get the position of the targeted player
+        playerPosition = teamManager.players[getPlayerIndex(targetPlayerID)].position;
 
         timeCounter += Time.deltaTime;
 
-        float dist = (player.transform.GetChild(0).position - transform.position).magnitude;
-        if (dist < range)
+        float dist2 = (playerPosition - transform.position).magnitude;
+        if (dist2 < range)
         {
 
-            //Vector3 toPlayer = new Vector3(player.transform.GetChild(0).position.x - transform.position.x, 0, player.transform.GetChild(0).position.z - transform.position.z).normalized;
-
+            // -- these commented lines make the turret snap instantly to the player
+            // Vector3 toPlayer = new Vector3(player.transform.GetChild(0).position.x - transform.position.x, 0, player.transform.GetChild(0).position.z - transform.position.z).normalized;
             // turretHead.transform.forward = toPlayer;
 
             updateTurning();
 
             if (timeCounter > 1.0f / bulletsPerSecond)
             {
-                timeCounter = 0;
-                pAlive.dealDamage(damage);
-                GameEvents.current.TakeDamage(damage);
-                setMussleFlashVisible(true);
-                bang.Play(0);
+                if (getAngleBetween(playerPosition - transform.position, getDirectionVector(0)) <= minimumFiringAngle)
+                {
+                    timeCounter = 0;
+                    // --- Deal damage to the targeted player
+                    turretFiredCallback(targetPlayerID, damage);
+
+                    setMussleFlashVisible(true);
+                    bang.Play(0);
+                }
             }
 
         }
@@ -115,8 +162,8 @@ public class TurretBrain : MonoBehaviour
 
     private float getNewVirtualDistanceSquaredToPlayer(float deltaAngle)
     {
-        float dx = player.transform.GetChild(0).position.x - getVirtualPoint(deltaAngle).x;
-        float dy = player.transform.GetChild(0).position.z - getVirtualPoint(deltaAngle).z;
+        float dx = playerPosition.x - getVirtualPoint(deltaAngle).x;
+        float dy = playerPosition.z - getVirtualPoint(deltaAngle).z;
         return dx * dx + dy * dy;
     }
 
@@ -136,6 +183,48 @@ public class TurretBrain : MonoBehaviour
             turretHead.transform.Rotate(0, rotationSpeed * Time.deltaTime, 0, Space.World);
         }
 
+        syncRotation(turretHead.transform.eulerAngles.y);
+
     }
+
+    int getPlayerIndex(uint id)
+    {
+        for (int i = 0; i < teamManager.players.Length; i++)
+        {
+            if (teamManager.players[i].id == id)
+            {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+
+    [ClientRpc]
+    void syncRotation(float rotation)
+    {
+        turretHead.transform.eulerAngles = new Vector3(
+            0, rotation, 0
+        );
+    }
+
+
+    public delegate void TurretFired(uint targetId, float damage);
+    public static event TurretFired OnTurretFired;
+
+    static void turretFiredCallback(uint targetId, float damage)
+    {
+        if (OnTurretFired != null)
+        {
+            OnTurretFired(targetId, damage);
+        }
+    }
+
+
+    float getAngleBetween(Vector3 turretDir, Vector3 toPlayer)
+    {
+        return Mathf.Acos(Vector3.Dot(turretDir, toPlayer) / (Mathf.Abs(turretDir.magnitude * toPlayer.magnitude)));
+    }
+
 
 }

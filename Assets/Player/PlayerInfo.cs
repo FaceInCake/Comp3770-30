@@ -6,4 +6,5 @@ public class PlayerInfo
 {
     public uint id;
     public bool onRedTeam;
+    public Vector3 position;
 }

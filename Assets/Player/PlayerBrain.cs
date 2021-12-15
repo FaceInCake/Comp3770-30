@@ -23,6 +23,7 @@ public class PlayerBrain : NetworkBehaviour
 
         FlagBaseBrain.OnFlagReturn += returnedFlag;
         TeamManager.RespawnAllPlayers += respawnRequested;
+        TurretBrain.OnTurretFired += takeDamageFromTurret;
 
         showHat();
     }
@@ -135,6 +136,14 @@ public class PlayerBrain : NetworkBehaviour
     void respawnRequested()
     {
         teleportToClosestSpawnPoint();
+    }
+
+    void takeDamageFromTurret(uint id, float damage)
+    {
+        if (netId == id)
+        {
+            gameObject.GetComponent<Alive>().dealDamage(damage);
+        }
     }
 
 }

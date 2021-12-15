@@ -19,12 +19,16 @@ public class MovePlayer : NetworkBehaviour
     CharacterController controller;
     GameObject camera;
     GameObject body;
+
+    TeamManager teamManager;
     
     void Start()
     {
         controller = gameObject.GetComponent<CharacterController>();
         camera = gameObject.transform.GetChild(1).gameObject;
         body = gameObject.transform.GetChild(0).gameObject;
+
+        teamManager = GameObject.Find("TeamManager").GetComponent<TeamManager>();
     
         if (!isLocalPlayer)
         {
@@ -164,9 +168,31 @@ public class MovePlayer : NetworkBehaviour
         updateSpeedModifier();
     
         controller.Move(velocity * Time.deltaTime);
+
+        sendPositionToPlayersList(gameObject.transform.position);
     
     }
-    
+
+    [Command]
+    void sendPositionToPlayersList(Vector3 position)
+    {
+        int index = getPlayerIndex(netId);
+        teamManager.players[index].position = position;
+        teamManager.resyncPlayersList();
+    }
+
+    int getPlayerIndex(uint id)
+    {
+        for (int i = 0; i < teamManager.players.Length; i++)
+        {
+            if (teamManager.players[i].id == id)
+            {
+                return i;
+            }
+        }
+        return -1;
+    }
+
     void updateSpeedModifier()
     {
         if (currentSpeedModifierTime > -0.5f)
