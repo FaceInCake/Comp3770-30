@@ -65,7 +65,8 @@ public class FlagBaseBrain : NetworkBehaviour
                     // red flag brought to the blue base
 
                     // -- move players onto spawn points
-                    flagReturnedCallback(true); // player is subscribed to this and will respawn itself
+                    flagReturnedCallback(true);
+                    RpcDropFlagCallback(true); // player is subscribed to this and will respawn itself
 
                     // -- drop both flags
                     redFlag.GetComponent<CaptureFlagBrain>().heldByPlayerWithID = 9999;
@@ -93,7 +94,8 @@ public class FlagBaseBrain : NetworkBehaviour
                     // blue flag brought to the red base
 
                     // -- move players onto spawn points
-                    flagReturnedCallback(false); // player is subscribed to this and will respawn itself
+                    flagReturnedCallback(false);
+                    RpcDropFlagCallback(false); // player is subscribed to this and will respawn itself
 
                     // -- drop both flags
                     redFlag.GetComponent<CaptureFlagBrain>().heldByPlayerWithID = 9999;
@@ -144,6 +146,12 @@ public class FlagBaseBrain : NetworkBehaviour
         Debug.Log("Red team points: " + teamManager.redTeamPoints + "   Blue team points: " + teamManager.blueTeamPoints);
     }
 
+
+    [ClientRpc]
+    void RpcDropFlagCallback(bool flagIsRed)
+    {
+        flagReturnedCallback(flagIsRed);
+    }
 
     public delegate void FlagReturned(bool flagIsRed);
     public static event FlagReturned OnFlagReturn;
