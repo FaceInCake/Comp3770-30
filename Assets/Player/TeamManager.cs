@@ -75,15 +75,16 @@ public class TeamManager : NetworkBehaviour
     {
         for (int i = 0; i < players.Length; i++)
         {
-            RpcSyncPlayer(i, players[i].id, players[i].onRedTeam);
+            RpcSyncPlayer(i, players[i].id, players[i].onRedTeam, players[i].position);
         }
     }
 
     [ClientRpc]
-    void RpcSyncPlayer(int index, uint id, bool onRedTeam)
+    void RpcSyncPlayer(int index, uint id, bool onRedTeam, Vector3 position)
     {
         players[index].id = id;
         players[index].onRedTeam = onRedTeam;
+        players[index].position = position;
     }
 
 }
