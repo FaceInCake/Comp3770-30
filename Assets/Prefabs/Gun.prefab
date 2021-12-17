@@ -189,7 +189,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19ea087205086457eabcc5990339d053, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 20
+  syncMode: 0
+  syncInterval: 0.1
+  damage: 50
   fireRate: 0.5
   spread: 0
   range: 100
@@ -201,3 +203,4 @@ MonoBehaviour:
   rapidFire: 0
   WeaponName: Basic Gun
   isGunEquipped: 1
+  cam: {fileID: 0}

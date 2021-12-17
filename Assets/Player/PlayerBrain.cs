@@ -24,6 +24,7 @@ public class PlayerBrain : NetworkBehaviour
         FlagBaseBrain.OnFlagReturn += returnedFlag;
         TeamManager.RespawnAllPlayers += respawnRequested;
         TurretBrain.OnTurretFired += takeDamageFromTurret;
+        gun.OnGunFired += takeDamageFromGuns;
 
         showHat();
     }
@@ -143,6 +144,16 @@ public class PlayerBrain : NetworkBehaviour
     {
         if (netId == id)
         {
+            gameObject.GetComponent<Alive>().dealDamage(damage);
+        }
+    }
+
+
+    void takeDamageFromGuns(uint id, int damage)
+    {
+        if (netId == id)
+        {
+            Debug.Log("Took "+ damage +" damage from gun, hp = " + gameObject.GetComponent<Alive>().getCurrentHealth());
             gameObject.GetComponent<Alive>().dealDamage(damage);
         }
     }

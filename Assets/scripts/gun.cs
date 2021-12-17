@@ -125,21 +125,19 @@ public class gun : NetworkBehaviour
                 int oppID = getPlayerIndex(ray.transform.GetComponentInParent<NetworkIdentity>().netId);
 
                 bool oppTeam = teamManager.players[oppID].onRedTeam; //true if red, false if blue
-                //if the player hit is on a different team
-
                 bool clientTeam = teamManager.players[clientID].onRedTeam;
-
 
                 Debug.Log("clientID: " + clientID + "Client team: " + clientTeam);
                 Debug.Log("oppID: " + oppID + "opp team: " + oppTeam);
                 Debug.Log("netID: " + netId + "Client netID: " + ray.transform.GetComponentInParent<NetworkIdentity>().netId);
 
-
-
                 if (oppTeam != clientTeam)
                 {
-                    entity.dealDamage(equippedWeapon.damage);
+                    //entity.dealDamage(equippedWeapon.damage);
                     //ray.collider.GetComponent<Alive>().dealDamage(equippedWeapon.damage);
+
+                    CmdDamagePlayer(ray.transform.GetComponentInParent<NetworkIdentity>().netId, equippedWeapon.damage);
+                    
                 }
             }
 
@@ -213,4 +211,33 @@ public class gun : NetworkBehaviour
         }
         return -1;
     }
+
+
+
+    public delegate void DamageDelt(uint targetId, int damage);
+    public static event DamageDelt OnGunFired;
+
+    static void damageDeltCallback(uint targetId, int damage)
+    {
+        if (OnGunFired != null)
+        {
+            OnGunFired(targetId, damage);
+        }
+    }
+
+    [Command]
+    void CmdDamagePlayer(uint id, int damage)
+    {
+        RpcDamagePlayer(id, damage);
+    }
+
+    [ClientRpc]
+    void RpcDamagePlayer(uint id, int damage)
+    {
+        Debug.Log("Dealing damage to id: " + id);
+        damageDeltCallback(id, damage);
+    }
+
+
+
 }

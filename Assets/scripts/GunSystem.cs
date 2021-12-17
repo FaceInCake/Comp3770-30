@@ -1,13 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using Mirror;
 
 /// <summary>
 /// The GunSystem class controls the weapon info for each weapon in the game
 /// This way we can have one script with several different weapon types
 /// </summary>
-public class GunSystem : MonoBehaviour
+public class GunSystem : NetworkBehaviour
 {
 
 
@@ -51,8 +51,8 @@ public class GunSystem : MonoBehaviour
     //bool gun actions
     bool isShooting, isReloading, canShoot;
 
-    //public Camera cam;
-    //public RaycastHit ray;
+    public Camera cam;
+    public RaycastHit ray;
 
 
     // Start is called before the first frame update
@@ -143,97 +143,100 @@ public class GunSystem : MonoBehaviour
 
 
     // Update is called once per frame
-    //void Update()
-    //{
-    //    if (isGunEquipped)
-    //    {
-    //        PlayerInput();
-    //    }
-    //}
+    void Update()
+    {
+        if (isGunEquipped)
+        {
+            PlayerInput();
+        }
+    }
 
-    //void PlayerInput()
-    //{
-    //    if(rapidFire) isShooting = Input.GetKey(KeyCode.Z);
-    //    else isShooting = Input.GetKeyDown(KeyCode.Z);
+    void PlayerInput()
+    {
+        if(rapidFire) isShooting = Input.GetKey(KeyCode.Z);
+        else isShooting = Input.GetKeyDown(KeyCode.Z);
 
 
-    //    if (Input.GetKeyDown(KeyCode.Tab) && ammoCount < magSize && !isReloading) Reload();
+        if (Input.GetKeyDown(KeyCode.Tab) && ammoCount < magSize && !isReloading) Reload();
 
-    //    //shooting
+        //shooting
 
-    //    if(canShoot && isShooting && !isReloading && ammoCount > 0)
-    //    {
-    //        shotsFired = bulletsPerShot;
-    //        Shoot();
-    //    }
+        if(canShoot && isShooting && !isReloading && ammoCount > 0)
+        {
+            shotsFired = bulletsPerShot;
+            Shoot();
+        }
 
-    //}
+    }
 
     public int getAmmo()
     {
         return ammoCount;
     }
 
-    //void Shoot()
-    //{
-    //    canShoot = false;
+    void Shoot()
+    {
+        canShoot = false;
 
-    //    //spread for shotgun/splash/burst type weapons
-    //    float x = Random.Range(-spread, spread);
-    //    float y = Random.Range(-spread, spread);
+        //spread for shotgun/splash/burst type weapons
+        float x = Random.Range(-spread, spread);
+        float y = Random.Range(-spread, spread);
 
-    //    Vector3 shotDirection = cam.transform.position + new Vector3(x, y, 0);
-
-
-    //    //raycast for shot
-    //    if(Physics.Raycast(cam.transform.position,  shotDirection , out ray, range))
-    //    {
-    //        Debug.Log(ray.collider.name);
-
-    //        //if raycast hits another player
-    //        if(ray.collider.CompareTag("Player"))
-    //        {
-    //            //if the player hit is on a different team
-    //            if(ray.collider.GetComponent<PlayerInfo>().onRedTeam != gameObject.GetComponent<PlayerInfo>().onRedTeam)
-    //            {
-    //                ray.collider.GetComponent<Alive>().dealDamage(damage); 
-    //            }
-    //        }
-
-    //    }
-    //    ammoCount--;
-    //    shotsFired--;
-
-    //    if (!IsInvoking("ResetShot") && !canShoot)
-    //    {
-    //        Invoke("ResetShot", fireRate);
-    //    }
-
-    //    if (shotsFired > 0 && ammoCount > 0)
-    //    {
-    //        Invoke("Shoot", timeBetweenShots);
-    //    }
-
-    //}
-
-    //void ResetShot()
-    //{
-    //    canShoot = true;
-    //}
+        Vector3 shotDirection = cam.transform.position + new Vector3(x, y, 0);
 
 
+        //raycast for shot
+        if(Physics.Raycast(cam.transform.position,  shotDirection , out ray, range))
+        {
+            Debug.Log(ray.collider.name);
 
-    //void Reload()
-    //{
-    //    isReloading = true;
-    //    Debug.Log("Realoding");
-    //    Invoke("ReloadFinished", reloadTime);
-    //}
+            //if raycast hits another player
+            if(ray.collider.CompareTag("Player"))
+            {
+                //if the player hit is on a different team
+                //if(ray.collider.GetComponent<PlayerInfo>().onRedTeam != gameObject.GetComponent<PlayerInfo>().onRedTeam)
+                //{
+                //    ray.collider.GetComponent<Alive>().dealDamage(damage); 
+                //}
 
-    //void ReloadFinished()
-    //{
-    //    ammoCount = magSize;
-    //    maxAmmo -= magSize;
-    //    isReloading = false;
-    //}
+            }
+
+        }
+        ammoCount--;
+        shotsFired--;
+
+        if (!IsInvoking("ResetShot") && !canShoot)
+        {
+            Invoke("ResetShot", fireRate);
+        }
+
+        if (shotsFired > 0 && ammoCount > 0)
+        {
+            Invoke("Shoot", timeBetweenShots);
+        }
+
+    }
+
+    void ResetShot()
+    {
+        canShoot = true;
+    }
+
+
+
+    void Reload()
+    {
+        isReloading = true;
+        Debug.Log("Realoding");
+        Invoke("ReloadFinished", reloadTime);
+    }
+
+    void ReloadFinished()
+    {
+        ammoCount = magSize;
+        maxAmmo -= magSize;
+        isReloading = false;
+    }
+
+
 }
