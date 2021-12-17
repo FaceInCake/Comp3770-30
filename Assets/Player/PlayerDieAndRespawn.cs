@@ -50,14 +50,18 @@ public class PlayerDieAndRespawn : NetworkBehaviour
             if (redFlag.GetComponent<CaptureFlagBrain>().heldByPlayerWithID == netId)
             {
                 // they will set the flag with on the ground
+                redFlag.GetComponent<CaptureFlagBrain>().heldByPlayerWithID = 9999;
                 grabFlagBrain.CmdSetFlagHeld(9999, true);
+                CmdSetFlagHeld(9999, true);
             }
 
             // if the player is holding the blue flag
             if (blueFlag.GetComponent<CaptureFlagBrain>().heldByPlayerWithID == netId)
             {
                 // they will set the flag with on the ground
+                blueFlag.GetComponent<CaptureFlagBrain>().heldByPlayerWithID = 9999;
                 grabFlagBrain.CmdSetFlagHeld(9999, false);
+                CmdSetFlagHeld(9999, false);
             }
 
 
@@ -101,6 +105,27 @@ public class PlayerDieAndRespawn : NetworkBehaviour
             }
         }
         return -1;
+    }
+
+
+    [Command]
+    public void CmdSetFlagHeld(uint id, bool red)
+    {
+        if (red)
+            redFlag.GetComponent<CaptureFlagBrain>().heldByPlayerWithID = id;
+        else
+            blueFlag.GetComponent<CaptureFlagBrain>().heldByPlayerWithID = id;
+
+        RpcSetFlagHeld(id, red);
+    }
+
+    [ClientRpc]
+    public void RpcSetFlagHeld(uint id, bool red)
+    {
+        if (red)
+            redFlag.GetComponent<CaptureFlagBrain>().heldByPlayerWithID = id;
+        else
+            blueFlag.GetComponent<CaptureFlagBrain>().heldByPlayerWithID = id;
     }
 
 }

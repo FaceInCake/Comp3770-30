@@ -24,19 +24,19 @@ public class PlayerGrabFlagBrain : NetworkBehaviour
         if (!isLocalPlayer)
             return;
 
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            CmdSetFlagHeld(netId, true);
-        }
-        if (Input.GetKeyDown(KeyCode.B))
-        {
-            CmdSetFlagHeld(netId, false);
-        }
-        if (Input.GetKeyDown(KeyCode.G))
-        {
-            CmdSetFlagHeld(9999, false);
-            CmdSetFlagHeld(9999, true);
-        }
+        //if (Input.GetKeyDown(KeyCode.R))
+        //{
+        //    CmdSetFlagHeld(netId, true);
+        //}
+        //if (Input.GetKeyDown(KeyCode.B))
+        //{
+        //    CmdSetFlagHeld(netId, false);
+        //}
+        //if (Input.GetKeyDown(KeyCode.G))
+        //{
+        //    CmdSetFlagHeld(9999, false);
+        //    CmdSetFlagHeld(9999, true);
+        //}
 
 
         if (redFlag.GetComponent<CaptureFlagBrain>().heldByPlayerWithID == netId)
