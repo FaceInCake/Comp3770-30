@@ -11,9 +11,8 @@ GameObject:
   - component: {fileID: 4776797265860428220}
   - component: {fileID: 6436470759144503472}
   - component: {fileID: 2566274598108691976}
-  - component: {fileID: 3473622475565134092}
-  - component: {fileID: 2029147975484639001}
   - component: {fileID: 617670501924124674}
+  - component: {fileID: 5723830014443580246}
   m_Layer: 0
   m_Name: Gun
   m_TagString: Untagged
@@ -58,7 +57,6 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
-  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -83,54 +81,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &3473622475565134092
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4698206686212864645}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Actions: {fileID: -944628639613478452, guid: 1ebdd8513f6d63d4991fbf4c6997f6b2, type: 3}
-  m_NotificationBehavior: 0
-  m_UIInputModule: {fileID: 0}
-  m_DeviceLostEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_DeviceRegainedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ControlsChangedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ActionEvents: []
-  m_NeverAutoSwitchControlSchemes: 0
-  m_DefaultControlScheme: 
-  m_DefaultActionMap: Gun
-  m_SplitScreenIndex: -1
-  m_Camera: {fileID: 0}
---- !u!114 &2029147975484639001
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4698206686212864645}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 231bb7ce4078e42fa9693399908b8b6b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  range: 100
-  damage: 7
-  maxAmmo: 45
-  currentAmmo: 45
-  playerCamera: {fileID: 0}
 --- !u!82 &617670501924124674
 AudioSource:
   m_ObjectHideFlags: 0
@@ -227,3 +177,27 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &5723830014443580246
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4698206686212864645}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19ea087205086457eabcc5990339d053, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 20
+  fireRate: 0.5
+  spread: 0
+  range: 100
+  timeBetweenShots: 0.5
+  reloadTime: 0.5
+  magSize: 8
+  magCount: 4
+  bulletsPerShot: 1
+  rapidFire: 0
+  WeaponName: Basic Gun
+  isGunEquipped: 1

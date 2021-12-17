@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class AmmoPickupScript : MonoBehaviour
 {
-    private Quaternion rotSpd ;
+    private Quaternion rotSpd;
     private BoxCollider bcol;
     private MeshRenderer mesh;
     void Start()
@@ -17,14 +17,20 @@ public class AmmoPickupScript : MonoBehaviour
     void Update()
     {
         if (bcol.enabled)
-            transform.rotation *= rotSpd; 
+            transform.rotation *= rotSpd;
     }
 
-    private void OnTriggerEnter(Collider other) {
-        if (other.tag == "Player") {
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "Player")
+        {
             gun g = other.GetComponentInChildren<gun>();
-            if (g) {
-                g.currentAmmo = g.maxAmmo;
+
+            if (g)
+            {
+                g.getEquipped().magCount = (g.getEquipped().getCurMaxAmmo() / g.getEquipped().magSize);
+                //g.getEquipped().setCurAmmoCount(g.getEquipped().get) currentAmmo = g.maxAmmo;
+
                 bcol.enabled = false;
                 mesh.enabled = false;
                 StartCoroutine(delayedEnable());
@@ -32,7 +38,8 @@ public class AmmoPickupScript : MonoBehaviour
         }
     }
 
-    IEnumerator delayedEnable () {
+    IEnumerator delayedEnable()
+    {
         yield return new WaitForSeconds(10);
         bcol.enabled = true;
         mesh.enabled = true;
