@@ -97,11 +97,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterBody: {fileID: 6605552556038986646}
-  isFirstPerson: 0
-  fp_mouseSensitivity: 0
-  fp_maxCameraAngleY: 0
-  fp_minCameraAngleY: 0
-  fp_camHeight: 0
+  isFirstPerson: 1
+  fp_mouseSensitivity: 10
+  fp_maxCameraAngleY: 60
+  fp_minCameraAngleY: -60
+  fp_camHeight: 0.35
   tp_mouseSensitivity: 0.13
   tp_minCameraAngleY: -1
   tp_maxCameraAngleY: 1
@@ -721,7 +721,7 @@ MonoBehaviour:
   dragHorizontal: 5
   gravity: 30
   jumpVelocity: 12
-  mouseSensitivityX: 5
+  mouseSensitivityX: 7
   velocity: {x: 0, y: 0, z: 0}
 --- !u!143 &2052578839068177164
 CharacterController:
