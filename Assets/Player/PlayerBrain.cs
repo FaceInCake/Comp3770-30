@@ -110,6 +110,7 @@ public class PlayerBrain : NetworkBehaviour
 
     void returnedFlag(bool flagIsRed)
     {
+        Debug.Log("Flag was deposited");
         RpcRespawnAllPlayers();
     }
 
@@ -117,7 +118,7 @@ public class PlayerBrain : NetworkBehaviour
     [ClientRpc]
     void RpcRespawnAllPlayers()
     {
-        Debug.Log("Flag was deposited");
+
         teleportToClosestSpawnPoint();
     }
 

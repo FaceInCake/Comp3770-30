@@ -47,7 +47,8 @@ public class GunSystem : NetworkBehaviour
     public string WeaponName; //name of the gun 
     public bool isGunEquipped; //is the gun currently equipped to a player?
 
-
+    
+    public bool isInf = false; //weapons like the fist and knife should have an infinte use 
     //bool gun actions
     bool isShooting, isReloading, canShoot;
 
@@ -156,8 +157,8 @@ public class GunSystem : NetworkBehaviour
         if(rapidFire) isShooting = Input.GetKey(KeyCode.Z);
         else isShooting = Input.GetKeyDown(KeyCode.Z);
 
-
-        if (Input.GetKeyDown(KeyCode.Tab) && ammoCount < magSize && !isReloading) Reload();
+        //if ammo count reaches 0 and the player isnt already realoding reload
+        if (ammoCount == 0 && !isReloading || Input.GetKeyDown(KeyCode.Tab) && ammoCount < magSize && !isReloading) Reload();
 
         //shooting
 
@@ -202,17 +203,22 @@ public class GunSystem : NetworkBehaviour
             }
 
         }
-        ammoCount--;
-        shotsFired--;
 
-        if (!IsInvoking("ResetShot") && !canShoot)
+        //if the weapon doesnt have infite use 
+        if(!isInf)
         {
-            Invoke("ResetShot", fireRate);
-        }
+            ammoCount--;
+            shotsFired--;
 
-        if (shotsFired > 0 && ammoCount > 0)
-        {
-            Invoke("Shoot", timeBetweenShots);
+            if (!IsInvoking("ResetShot") && !canShoot)
+            {
+                Invoke("ResetShot", fireRate);
+            }
+
+            if (shotsFired > 0 && ammoCount > 0)
+            {
+                Invoke("Shoot", timeBetweenShots);
+            }
         }
 
     }
