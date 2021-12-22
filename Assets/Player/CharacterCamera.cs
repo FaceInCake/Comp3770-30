@@ -22,6 +22,7 @@ public class CharacterCamera : MonoBehaviour
 
     void Start()
     {
+        isFirstPerson = true;
     }
 
     float mouseYaw = 0.0f;

@@ -11,6 +11,7 @@ public class HUDManager : NetworkBehaviour
     public Slider healthBar;
     Alive playerHealth;
     GunSystem equippedWeapon;
+    gun loadout;
     GameObject player;
     //public GameObject rightContainer;
 
@@ -40,7 +41,9 @@ public class HUDManager : NetworkBehaviour
 
         //equippedWeapon = gameObject.transform.parent.GetComponentInChildren<GunSystem>();
 
-        equippedWeapon = gameObject.GetComponentInChildren<GunSystem>();
+        loadout = gameObject.GetComponent<gun>();
+        equippedWeapon = loadout.getEquipped();
+        //equippedWeapon = gameObject.GetComponentInChildren<GunSystem>();
 
         Debug.Log(equippedWeapon.WeaponName);
 
@@ -56,6 +59,7 @@ public class HUDManager : NetworkBehaviour
             return;
 
         UpdateHealthBar();
+        equippedWeapon = loadout.getEquipped();
         UpdateGunInfoBar(HUD.transform.Find("ContainerRight").gameObject);
         UpdateTeamFlag();
     }

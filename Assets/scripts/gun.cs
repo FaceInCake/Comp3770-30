@@ -17,9 +17,13 @@ public class gun : NetworkBehaviour
     GameObject cam;
     //public Camera cam;
     public RaycastHit ray;
+    public int selectedWeapon = 0;
+    public int selectedLoadout = 0;
 
 
     GunSystem equippedWeapon;
+    GameObject equippedLoadout;
+    GameObject loadoutManager;
     TeamManager teamManager;
 
 
@@ -31,7 +35,15 @@ public class gun : NetworkBehaviour
         //currentAmmo = maxAmmo;
         //gunfire = GetComponent<AudioSource>();
 
-        equippedWeapon = gameObject.GetComponentInChildren<GunSystem>();
+        loadoutManager = gameObject.transform.Find("Loadout").gameObject;
+        loadOutSelect(loadoutManager.transform.childCount-1);
+        //equippedWeapon = equippedLoadout.transform.GetChild(0).GetComponent<GunSystem>();
+        //equippedWeapon.gameObject.SetActive(true);
+        WeaponSwitch();
+
+        //Debug.Log(equippedLoadout);
+        //equippedWeapon = gameObject.GetComponentInChildren<GunSystem>();
+        //equippedWeapon = equippedLoadout.GetComponentInChildren<GunSystem>();
         teamManager = GameObject.Find("TeamManager").gameObject.GetComponent<TeamManager>();
 
     }
@@ -39,6 +51,13 @@ public class gun : NetworkBehaviour
     public GunSystem getEquipped()
     {
         return equippedWeapon;
+    }
+
+    public void loadOutSelect(int selected)
+    {
+        string currentLoadout = "Loadout" + selected;
+        equippedLoadout = loadoutManager.transform.GetChild(selected).gameObject;
+            //gameObject.Find(currentLoadout).gameObject;
     }
 
 
@@ -77,9 +96,30 @@ public class gun : NetworkBehaviour
             OnFire();
         }
 
+        if(Input.GetKeyDown(KeyCode.LeftShift))
+        {
+
+            int previousWeapon = selectedWeapon;
+            //Debug.Log("Change");
+
+            //each loadout only has 2 weapons, so only 2 swaps
+            if (selectedWeapon >= 1)
+            {
+                selectedWeapon = 0;
+            }
+            else
+            {
+                selectedWeapon++;
+            }
+
+            if(previousWeapon != selectedWeapon)
+            {
+                WeaponSwitch();
+            }
+            
+        }
+
     }
-
-
 
 
     public void OnFire()
@@ -197,6 +237,31 @@ public class gun : NetworkBehaviour
         equippedWeapon.magCount--;
 
         equippedWeapon.setReloadStatus(false);
+    }
+
+    void WeaponSwitch()
+    {
+        int i = 0;
+
+        foreach(Transform weapon in equippedLoadout.transform)
+        {
+            //Debug.Log(weapon.name);
+            if(i == selectedWeapon)
+            {
+                Debug.Log(weapon.name);
+                weapon.gameObject.SetActive(true);
+                equippedWeapon = weapon.gameObject.GetComponent<GunSystem>();
+                equippedWeapon.isGunEquipped = true;
+                Debug.Log(equippedWeapon.WeaponName);
+            }
+            else
+            {
+                weapon.gameObject.SetActive(false);
+                weapon.gameObject.GetComponent<GunSystem>().isGunEquipped = false;
+            }
+            i++;
+        }
+        //equippedWeapon = equippedLoadout.GetComponentInChildren<GunSystem>();
     }
 
 
