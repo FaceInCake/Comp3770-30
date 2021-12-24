@@ -1314,7 +1314,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  isLoadoutSelect: 0
 --- !u!114 &8185435014725895855
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2351,6 +2350,26 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2304038003834225415, guid: 8ab10ce011cfe41f8b60fdb33bc7a6b3,
         type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2304038003834225415, guid: 8ab10ce011cfe41f8b60fdb33bc7a6b3,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2304038003834225415, guid: 8ab10ce011cfe41f8b60fdb33bc7a6b3,
+        type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2304038003834225415, guid: 8ab10ce011cfe41f8b60fdb33bc7a6b3,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2304038003834225415, guid: 8ab10ce011cfe41f8b60fdb33bc7a6b3,
+        type: 3}
       propertyPath: m_LocalScale.x
       value: 0.5
       objectReference: {fileID: 0}
@@ -2362,12 +2381,12 @@ PrefabInstance:
     - target: {fileID: 2304038003834225415, guid: 8ab10ce011cfe41f8b60fdb33bc7a6b3,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -235
+      value: 274
       objectReference: {fileID: 0}
     - target: {fileID: 2304038003834225415, guid: 8ab10ce011cfe41f8b60fdb33bc7a6b3,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -120
+      value: 201
       objectReference: {fileID: 0}
     - target: {fileID: 2425205672159131979, guid: 8ab10ce011cfe41f8b60fdb33bc7a6b3,
         type: 3}
@@ -2393,6 +2412,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Text
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6439933387827823824, guid: 8ab10ce011cfe41f8b60fdb33bc7a6b3,
+        type: 3}
+      propertyPath: m_FontData.m_MinSize
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6439933387827823824, guid: 8ab10ce011cfe41f8b60fdb33bc7a6b3,
+        type: 3}
+      propertyPath: m_FontData.m_RichText
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8560628233153536980, guid: 8ab10ce011cfe41f8b60fdb33bc7a6b3,
         type: 3}

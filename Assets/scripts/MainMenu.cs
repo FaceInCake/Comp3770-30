@@ -24,14 +24,7 @@ public class MainMenu : MonoBehaviour
 
     public void StartGame()
     {
-        //if(gameover == false)
-        //{
-        //    SceneManager.LoadScene("Level1");
-        //    Debug.Log("Level One Loaded!!!");
-        //}
-        SceneManager.LoadScene("Level1");
-        Debug.Log("Level One Loaded!!!");
-
+        SceneManager.LoadScene("MainGame");
     }
 
     public void QuitGame()
