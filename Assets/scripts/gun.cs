@@ -55,7 +55,7 @@ public class gun : NetworkBehaviour
 
     public void loadOutSelect(int selected)
     {
-        string currentLoadout = "Loadout" + selected;
+        string nextLoadout = "Loadout" + selected;
         equippedLoadout = loadoutManager.transform.GetChild(selected).gameObject;
             //gameObject.Find(currentLoadout).gameObject;
     }
@@ -85,11 +85,18 @@ public class gun : NetworkBehaviour
         else equippedWeapon.setIsShootingStatus(Input.GetKey(KeyCode.Z));
 
 
-        if (Input.GetKeyDown(KeyCode.Tab) && equippedWeapon.magCount > 0 && equippedWeapon.getCurAmmoCount() < equippedWeapon.magSize && !equippedWeapon.getReloadSatus()) Reload();
+        if(Input.GetKeyDown(KeyCode.Tab)
+        && equippedWeapon.magCount > 0
+        && equippedWeapon.getCurAmmoCount() < equippedWeapon.magSize
+        && !equippedWeapon.getReloadSatus())
+            Reload();
 
         //shooting
 
-        if (equippedWeapon.getCanShootStatus() && equippedWeapon.getIsShootingStatus() && !equippedWeapon.getReloadSatus() && equippedWeapon.getCurAmmoCount() > 0)
+        if(equippedWeapon.getCanShootStatus()
+        && equippedWeapon.getIsShootingStatus()
+        && !equippedWeapon.getReloadSatus()
+        && equippedWeapon.getCurAmmoCount() > 0)
         {
             //equippedWeapon.shotsFired = equippedWeapon.bulletsPerShot;
             equippedWeapon.updateCurShotsFired('+', equippedWeapon.bulletsPerShot);
@@ -239,7 +246,7 @@ public class gun : NetworkBehaviour
         equippedWeapon.setReloadStatus(false);
     }
 
-    void WeaponSwitch()
+    public void WeaponSwitch()
     {
         int i = 0;
 

@@ -15,6 +15,7 @@ public class LoadoutSelect : MonoBehaviour
     Text primary;
     Text secondary;
     gun player;
+    private int iSelectedWeapon;
 
 
     // Start is called before the first frame update
@@ -32,7 +33,7 @@ public class LoadoutSelect : MonoBehaviour
     {
 
         //change this to when the player spwans/respawns
-        if(Input.GetKeyDown(KeyCode.Escape))
+        if(Input.GetKeyDown(KeyCode.B))
         {
             PanelToggle();
         }
@@ -60,6 +61,8 @@ public class LoadoutSelect : MonoBehaviour
             //Cursor.lockState = CursorLockMode.None;
             //Cursor.lockState = CursorLockMode.Confined;
             Cursor.visible = false;
+            player.loadOutSelect(iSelectedWeapon);
+            player.WeaponSwitch();
         }
         
     }
@@ -70,7 +73,7 @@ public class LoadoutSelect : MonoBehaviour
     {
         //player.loadOutSelect(i);
         GameObject selectedWeapon = loadoutManager.transform.GetChild(i).gameObject;
-
+        iSelectedWeapon = i;
 
         primary.text = "Primary Weapon\n" + selectedWeapon.transform.GetChild(0).gameObject.GetComponent<GunSystem>().WeaponName;
         secondary.text = "Secondary Weapon\n" +  selectedWeapon.transform.GetChild(1).gameObject.GetComponent<GunSystem>().WeaponName;
