@@ -23,7 +23,6 @@ public class SpawnPointManager : NetworkBehaviour
 
         redSpawnPoints = new List<Transform>();
         blueSpawnPoints = new List<Transform>();
-        setToLevel(currentLevelIndex);
     }
 
     // is called by an rpc and server function
